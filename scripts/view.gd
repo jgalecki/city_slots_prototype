@@ -8,7 +8,7 @@ var camera_rotation:Vector3
 func _ready():
 	
 	camera_rotation = rotation_degrees # Initial rotation
-	camera_position = Vector3(0.7, 0, 0.7)
+	camera_position = Vector3(1.7, 0, 1.7)
 	pass
 
 func _process(delta):

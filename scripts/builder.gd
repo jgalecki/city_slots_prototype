@@ -79,8 +79,8 @@ func get_mesh(packed_scene):
 func action_build(gridmap_position):
 	if Input.is_action_just_pressed("build"):
 		
-		if gridmap_position.x < -1 || gridmap_position.x > 2				\
-		   || gridmap_position.z < -1 || gridmap_position.z > 2:
+		if gridmap_position.x < 0 || gridmap_position.x > 3				\
+		   || gridmap_position.z < 0 || gridmap_position.z > 3:
 			print("failed placement! at " + str(gridmap_position))
 			return
 		
