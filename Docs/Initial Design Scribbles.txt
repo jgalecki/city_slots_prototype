@@ -1,0 +1,72 @@
+City Slots is a game based on combining the 'combinatorial fun' of Luck be a Landlord with a city builder. The City builder should add another strategic layer on top of the basic slots mechanic
+
+Look at Townscaper, The Block for juice inspiration
+
+Use KenneyNL city builder demo as a base for the game
+  models
+  grid
+  building placement
+ 
+The game has two halves to the UI. The left half is a 4x4 slot machine grid in 2D. The right is a 16x16 city builder grid, divided into 4 2x2 sections split by roadways..
+
+The game will alternate between a 'pull' phase (activating the slot machine) and a 'build' phase (building or adding onto a building in the city).
+
+The Pull phase will create a random assortment of symbols based on the player's 'deck'. The player then gains resources based on the symbols created.
+  There could be bonuses or adjustments based on the city block.
+
+The Deck phase will allow the player to build or remove a building. The game will work with the idea of 'stacking' buildings on top of each other. Different combinations / arrangements of buildings will allow different powers, gain different abilities (relics?), or incomes.
+
+The game will have a Cozy City vibe. Creating a walkable city, green spaces, etc. As a stretch goal, making tons of money and tons of factories could increase pollution levels and make the city worse.
+  Industry could add a pollution malus to all neighboring squares and all layers below it
+    Some equilibrium of building fancy houses up above the pollution levels, houses below turn to slums.
+   
+Different resources:
+  Energy - made by power plants
+  Pops - made by houses
+  Money - made by all
+  Food - used by pops
+  Happiness - VPs
+
+  Basic Chain:
+    Food    ->  Pops    --> Money
+                Energy  -^
+
+Buildings and building combinations
+  Park - Top piece. (Nothing on top.) +100% tax of adjacent House pieces. +50% tax of elevated nieghbor Houses.
+  House - Needs Food, produces 1 Pop. 1 money per cycle.
+  Farm? - Gives Food, takes pop.
+  Market - Gives Food
+ 
+
+Stretch: Morning / Afternoon / Evening / Night cycles for city? There could be separate bonuses per building at different times.
+
+
+The basic question of the game needs to be: Where is the player making choices?
+  lets do that at the building level.
+  The player
+ 
+Buildings and combos create symbols for slots. Symbols are modified by the buildings they land on and collected.
+
+Symbol: Gold. Destroyed when played, creates $1.
+Symbol: Goods. Creates $1.
+Building: Train Station. Generates 5 Golds per turn. Destroys Goods that land on it and creates $5 per.
+Symbol: Food. Creates $1.
+Symbol: Pop. Creates $2.
+Building: House. Generates 1 Gold per turn. If a Food lands on it, replaces with a Pop.
+Symbol: Doubloon. Destroyed on play, creates $2.
+Building: Park. Nearby Residence buildings create Doubloons.
+Building: Bank. Destroys Money symbols, doubles their value.
+Building: Market. Generates 1 Food per turn.
+Building: Factory. Generates 1 Goods per turn.
+
+
+Maybe keeping it a broad 'cozy city' theme without much in the way of logistics is a better way to go about it. Keeping the symbols more abstract allows more freedom in how they interact with each other.
+
+What are some major 'strategies' or themes that the payer could go for?
+Food / foodie (restaurants, bakeries, bars, coffee shops, markets, food trucks)
+Music (bars, venues, concert halls, coffee shops)
+Culture (museums, libraries, universities)
+Books (bookstores, coffee shops, libraries, universities)
+
+
+Idea: Roads 'connect' and catch symbols, but only when the road is completed.

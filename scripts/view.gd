@@ -8,7 +8,7 @@ var camera_rotation:Vector3
 func _ready():
 	
 	camera_rotation = rotation_degrees # Initial rotation
-	
+	camera_position = Vector3(0.7, 0, 0.7)
 	pass
 
 func _process(delta):
@@ -18,7 +18,9 @@ func _process(delta):
 	position = position.lerp(camera_position, delta * 8)
 	rotation_degrees = rotation_degrees.lerp(camera_rotation, delta * 6)
 	
-	handle_input(delta)
+	# handle_input(delta)
+	
+	print("camera: " + str(camera_position))
 
 # Handle input
 

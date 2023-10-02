@@ -1,0 +1,62 @@
+Week 1: Basic UI and placement. Layer selection and display. Background Grid. Random starting building placement. Slot 'pull' and symbol generation. Display of three building choices, user selection of building. User placement of building (layer, rotation).
+Symbol count: 1
+Building count: 3
+
+Week 2: UI Popup display when hovering over a building in playing grid or selection options. Generation of new symbols (not just money) and interactions with buildings underneath, layer by layer. Adjacency effects for buildings. Weekly 'rent' objectives, winning and losing conditions
+Symbol count: 3
+Building count: 3
+
+Week 3: Additional buildings and symbols. Sound effects. Get cranking on Asset Forge. Title screen and scene loading.
+Symbol count: 7
+Building count: 7
+
+Week 4: More buildings and symbols. Balance. Juice the hell out of building placement and symbol fallthrough. Title screen soundtrack selection
+Symbol count: 10
+Building count: 10
+
+Week 5: Additional polish. More buildings and symbols. UI Theming.
+Symbol count: 13
+Building count: 13
+
+Week 6: Additional polish. Key art for itch page, steam page. Finish off symbols and buildings. Variants for topped and topless buildings
+Symbol count: 16
+Buidling count: 16
+
+Week 7: Lighting and shader experimentation week. More polish. More symbols and buildings?
+Symbol count: 20
+Buidling count: 20
+
+Week 8: Final week! Polish, playtest, rinse and repeat.
+Symbol count: 20
+Buidling count: 20
+
+
+
+Week 1!
+xx Project opened
+Basic Import Stuff
+  xx Display own asset-forge building in game
+  xx Fixes for import
+    xx Up axis 
+    xx Building scale on placement
+    xx Building scale on selector display
+    xx Origin offset
+  Fix offset issues with selector vs gridmap?
+  Background texture for plane
+  
+Background Grid display. Cubes?
+
+Zoom in camera?
+UI mockups
+  Choice of 3 buildings
+  Layer selection
+  "Library" screen
+  Symbol
+UI: layer selection
+
+
+Model import: Creating a 4x4x4 block building
+  Create a 4x4x4 building
+  Select all, select "Move to Center"
+  Translate up 2 blocks
+  Export as a .gtlf with Y axis as up, scale of 100, and merge blocks checked

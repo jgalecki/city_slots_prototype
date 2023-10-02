@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://vgwrcfy1qawf"]
+[gd_scene load_steps=24 format=3 uid="uid://vgwrcfy1qawf"]
 
 [ext_resource type="Script" path="res://scripts/builder.gd" id="1_jybm7"]
 [ext_resource type="Environment" uid="uid://jbptgqvstei3" path="res://scenes/main-environment.tres" id="1_yndf3"]
@@ -20,6 +20,7 @@
 [ext_resource type="Resource" uid="uid://y6jafhfnhbrp" path="res://structures/grass-trees-tall.tres" id="13_t5d2v"]
 [ext_resource type="Resource" uid="uid://bqb6g3t0tebno" path="res://structures/building-garage.tres" id="13_ut2cy"]
 [ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="16_vlub6"]
+[ext_resource type="Resource" uid="uid://ckqfo3lvdk661" path="res://structures/test_house.tres" id="17_aj26o"]
 [ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="17_cjamx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_q176i"]
@@ -31,7 +32,7 @@ shadow_color = Color(0, 0, 0, 0.392157)
 
 [node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("selector", "selector_container", "view_camera", "gridmap", "cash_display")]
 script = ExtResource("1_jybm7")
-structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_bwyku"), ExtResource("3_o6o81"), ExtResource("3_6fpyf"), ExtResource("7_kqu4g"), ExtResource("8_1swhv"), ExtResource("4_b632v"), ExtResource("8_4il2q"), ExtResource("5_v5o2m"), ExtResource("6_f4603"), ExtResource("10_84or2"), ExtResource("12_8obn7"), ExtResource("13_ut2cy"), ExtResource("9_ifw7y"), ExtResource("10_vaeah"), ExtResource("13_t5d2v")])
+structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_bwyku"), ExtResource("3_o6o81"), ExtResource("3_6fpyf"), ExtResource("7_kqu4g"), ExtResource("8_1swhv"), ExtResource("4_b632v"), ExtResource("8_4il2q"), ExtResource("5_v5o2m"), ExtResource("6_f4603"), ExtResource("10_84or2"), ExtResource("12_8obn7"), ExtResource("13_ut2cy"), ExtResource("9_ifw7y"), ExtResource("10_vaeah"), ExtResource("13_t5d2v"), ExtResource("17_aj26o")])
 selector = NodePath("Selector")
 selector_container = NodePath("Selector/Container")
 view_camera = NodePath("../View/Camera")
@@ -45,21 +46,23 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.0
 texture = ExtResource("4_wr1wv")
 
 [node name="Container" type="Node3D" parent="Builder/Selector"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="View" type="Node3D" parent="."]
 transform = Transform3D(0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573576, -0.707107, -0.40558, 0.579228, 0, 0, 0)
 script = ExtResource("8_yovpv")
 
 [node name="Camera" type="Camera3D" parent="View"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+transform = Transform3D(1, 0, 0, 0, 1, 7.15256e-07, 0, 0, 1, 0, 9.53674e-07, 30)
 environment = ExtResource("1_yndf3")
 fov = 20.0
 
 [node name="GridMap" type="GridMap" parent="."]
-cell_size = Vector3(1, 1, 1)
+cell_size = Vector3(1.2, 1.2, 1.2)
 cell_center_x = false
 cell_center_y = false
 cell_center_z = false
+cell_scale = 0.25
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.422618, -0.694272, 0.582563, 0, 0.642788, 0.766044, -0.906308, 0.323744, -0.271654, 0, 0, 0)

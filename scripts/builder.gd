@@ -28,6 +28,7 @@ func _ready():
 		
 		var id = mesh_library.get_last_unused_item_id()
 		
+		print(id)
 		mesh_library.create_item(id)
 		mesh_library.set_item_mesh(id, get_mesh(structure.model))
 		mesh_library.set_item_mesh_transform(id, Transform3D())
@@ -54,7 +55,8 @@ func _process(delta):
 		view_camera.project_ray_normal(get_viewport().get_mouse_position()))
 
 	var gridmap_position = Vector3(round(world_position.x), 0, round(world_position.z))
-	selector.position = lerp(selector.position, gridmap_position, delta * 40)
+	var selector_grid_position = gridmap_position * 1.2		# size of cells in Gridmap
+	selector.position = lerp(selector.position, selector_grid_position, delta * 40)
 	
 	action_build(gridmap_position)
 	action_demolish(gridmap_position)
@@ -77,6 +79,12 @@ func get_mesh(packed_scene):
 func action_build(gridmap_position):
 	if Input.is_action_just_pressed("build"):
 		
+		if gridmap_position.x < -1 || gridmap_position.x > 2				\
+		   || gridmap_position.z < -1 || gridmap_position.z > 2:
+			print("failed placement! at " + str(gridmap_position))
+			return
+		
+		print("Placed block at " + str(gridmap_position))
 		var previous_tile = gridmap.get_cell_item(gridmap_position)
 		gridmap.set_cell_item(gridmap_position, index, gridmap.get_orthogonal_index_from_basis(selector.basis))
 		
