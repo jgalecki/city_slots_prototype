@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Structure" load_steps=3 format=3 uid="uid://d0trbdqq16fqv"]
+
+[ext_resource type="PackedScene" uid="uid://sjscbdlrqlr0" path="res://models/Empty Cube Frame.glb" id="1_p85vh"]
+[ext_resource type="Script" path="res://scripts/structure.gd" id="2_aboxc"]
+
+[resource]
+script = ExtResource("2_aboxc")
+model = ExtResource("1_p85vh")
+price = 0

@@ -4,20 +4,35 @@ extends Node3D
 
 var map:DataMap
 
-var index:int = 0 # Index of structure being built
+var structureIndex:int = 0 # Index of structure being built
+var layer:int = 0 # Layer currently viewed
+var grid_structures = [[[]]]
 
 @export var selector:Node3D # The 'cursor'
 @export var selector_container:Node3D # Node that holds a preview of the structure
 @export var view_camera:Camera3D # Used for raycasting mouse
 @export var gridmap:GridMap
 @export var cash_display:Label
+@export var layer_display:Label
 
-var plane:Plane # Used for raycasting mouse
+var planes = [] # Used for raycasting mouse
+
+signal layer_changed(new_layer:int)
 
 func _ready():
 	
 	map = DataMap.new()
-	plane = Plane(Vector3.UP, Vector3.ZERO)
+	grid_structures = []
+	planes = []
+	for y in range(5):
+		planes.append(Plane(Vector3.UP, Vector3(0, y, 0)))
+		grid_structures.append([])
+		for z in range(4):
+			grid_structures[y].append([])
+			for x in range(4):
+				grid_structures[y][z].append(0)
+				
+	print_grid_structures()
 	
 	# Create new MeshLibrary dynamically, can also be done in the editor
 	# See: https://docs.godotengine.org/en/stable/tutorials/3d/using_gridmaps.html
@@ -28,15 +43,22 @@ func _ready():
 		
 		var id = mesh_library.get_last_unused_item_id()
 		
-		print(id)
 		mesh_library.create_item(id)
 		mesh_library.set_item_mesh(id, get_mesh(structure.model))
 		mesh_library.set_item_mesh_transform(id, Transform3D())
 		
 	gridmap.mesh_library = mesh_library
 	
+	for i in range(4):
+		for j in range(4):
+			for k in range(4):
+				gridmap.set_cell_item(Vector3i(i, j, k), 0)
+			
+	
+	layer_changed.emit(layer)
+	
 	update_structure()
-	update_cash()
+	update_base_ui()
 
 func _process(delta):
 	
@@ -44,17 +66,18 @@ func _process(delta):
 	
 	action_rotate() # Rotates selection 90 degrees
 	action_structure_toggle() # Toggles between structures
+	action_layer_change() # Checks for layer change input
 	
 	action_save() # Saving
 	action_load() # Loading
 	
 	# Map position based on mouse
 	
-	var world_position = plane.intersects_ray(
+	var world_position = planes[layer].intersects_ray(
 		view_camera.project_ray_origin(get_viewport().get_mouse_position()),
 		view_camera.project_ray_normal(get_viewport().get_mouse_position()))
 
-	var gridmap_position = Vector3(round(world_position.x), 0, round(world_position.z))
+	var gridmap_position = Vector3(round(world_position.x), layer, round(world_position.z))
 	var selector_grid_position = gridmap_position * 1.2		# size of cells in Gridmap
 	selector.position = lerp(selector.position, selector_grid_position, delta * 40)
 	
@@ -86,17 +109,21 @@ func action_build(gridmap_position):
 		
 		print("Placed block at " + str(gridmap_position))
 		var previous_tile = gridmap.get_cell_item(gridmap_position)
-		gridmap.set_cell_item(gridmap_position, index, gridmap.get_orthogonal_index_from_basis(selector.basis))
+		gridmap.set_cell_item(gridmap_position, structureIndex, gridmap.get_orthogonal_index_from_basis(selector.basis))
+		grid_structures[gridmap_position.y][gridmap_position.z][gridmap_position.x] = structureIndex
 		
-		if previous_tile != index:
-			map.cash -= structures[index].price
-			update_cash()
+		if previous_tile != structureIndex:
+			map.cash -= structures[structureIndex].price
+			update_base_ui()
+			
+		print_grid_structures()
 
 # Demolish (remove) a structure
 
 func action_demolish(gridmap_position):
 	if Input.is_action_just_pressed("demolish"):
 		gridmap.set_cell_item(gridmap_position, -1)
+		grid_structures[gridmap_position.y][gridmap_position.z][gridmap_position.x]
 
 # Rotates the 'cursor' 90 degrees
 
@@ -108,12 +135,22 @@ func action_rotate():
 
 func action_structure_toggle():
 	if Input.is_action_just_pressed("structure_next"):
-		index = wrap(index + 1, 0, structures.size())
+		structureIndex = wrap(structureIndex + 1, 0, structures.size())
 	
 	if Input.is_action_just_pressed("structure_previous"):
-		index = wrap(index - 1, 0, structures.size())
+		structureIndex = wrap(structureIndex - 1, 0, structures.size())
 
 	update_structure()
+
+func action_layer_change():
+	if (Input.is_action_just_pressed("layer_up")):
+		layer = wrap(layer + 1, 0, 5)
+		layer_changed.emit(layer)
+	
+	if (Input.is_action_just_pressed("layer_down")):
+		layer = wrap(layer - 1, 0, 5)
+		layer_changed.emit(layer)
+		
 
 # Update the structure visual in the 'cursor'
 
@@ -123,12 +160,13 @@ func update_structure():
 		selector_container.remove_child(n)
 		
 	# Create new structure preview in selector
-	var _model = structures[index].model.instantiate()
+	var _model = structures[structureIndex].model.instantiate()
 	selector_container.add_child(_model)
 	_model.position.y += 0.25
 	
-func update_cash():
+func update_base_ui():
 	cash_display.text = "$" + str(map.cash)
+	layer_display.text = str(layer)
 
 # Saving/load
 
@@ -159,4 +197,23 @@ func action_load():
 		for cell in map.structures:
 			gridmap.set_cell_item(Vector3i(cell.position.x, 0, cell.position.y), cell.structure, cell.orientation)
 			
-		update_cash()
+		update_base_ui()
+
+
+func _on_layer_changed(new_layer):
+	update_base_ui()
+	
+	for y in range(5):
+		for z in range(4):
+			for x in range(4):
+				var cell = Vector3i(x, y, z)
+				if y > new_layer:
+					gridmap.set_cell_item(cell, -1 ) 
+				else:
+					gridmap.set_cell_item(cell, grid_structures[y][z][x])
+	
+func print_grid_structures():
+	for y in range(4,-1,-1):
+		print ("layer: " + str(y))
+		for z in range(4):
+			print(str(grid_structures[y][z][0]) + " " + str(grid_structures[y][z][1]) + " " + str(grid_structures[y][z][2]) + " " + str(grid_structures[y][z][3]))

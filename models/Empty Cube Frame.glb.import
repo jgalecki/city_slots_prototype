@@ -3,20 +3,20 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://nechbewutdkl"
-path="res://.godot/imported/test-building-roofed-1.glb-fffdac4d5c60cc303500b65c35d6ca63.scn"
+uid="uid://sjscbdlrqlr0"
+path="res://.godot/imported/Empty Cube Frame.glb-2adda98f9c02f3a65eb762d3af8670c2.scn"
 
 [deps]
 
-source_file="res://models/test-building-roofed-1.glb"
-dest_files=["res://.godot/imported/test-building-roofed-1.glb-fffdac4d5c60cc303500b65c35d6ca63.scn"]
+source_file="res://models/Empty Cube Frame.glb"
+dest_files=["res://.godot/imported/Empty Cube Frame.glb-2adda98f9c02f3a65eb762d3af8670c2.scn"]
 
 [params]
 
 nodes/root_type="Node3D"
 nodes/root_name="Scene Root"
 nodes/apply_root_scale=true
-nodes/root_scale=0.5
+nodes/root_scale=1.0
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true

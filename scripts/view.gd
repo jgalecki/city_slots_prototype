@@ -19,8 +19,6 @@ func _process(delta):
 	rotation_degrees = rotation_degrees.lerp(camera_rotation, delta * 6)
 	
 	# handle_input(delta)
-	
-	print("camera: " + str(camera_position))
 
 # Handle input
 
@@ -44,3 +42,8 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("camera_rotate"):
 			camera_rotation += Vector3(0, -event.relative.x / 10, 0)
+
+
+
+func _on_builder_layer_changed(new_layer):
+	camera_position = Vector3(1.7, new_layer , 1.7)
