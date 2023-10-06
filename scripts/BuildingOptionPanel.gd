@@ -18,21 +18,21 @@ func set_option(structure:Structure):
 	displayed_structure = structure
 	
 	match structure.type:
-		Structure.Type.Apartment:
+		Structure.Types.Apartment:
 			building_name_label.text = "Apartment"
-		Structure.Type.CoffeeShop:
+		Structure.Types.CoffeeShop:
 			building_name_label.text = "Coffee Shop"
-		Structure.Type.TrainStation:
+		Structure.Types.TrainStation:
 			building_name_label.text = "Train Station"
 		_:
 			assert(false)
 			
 	match structure.rarity:
-		Structure.Rarity.Common:
+		Structure.Rarities.Common:
 			building_rarity_label.text = "[center][b][color=gray]Common"
-		Structure.Rarity.Uncommon:
+		Structure.Rarities.Uncommon:
 			building_rarity_label.text = "[center][b][color=yellow]Uncommon"
-		Structure.Rarity.Rare:
+		Structure.Rarities.Rare:
 			building_rarity_label.text = "[center][b][color=red]Rare"
 		_:
 			assert(false)

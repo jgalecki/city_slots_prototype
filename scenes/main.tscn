@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://vgwrcfy1qawf"]
+[gd_scene load_steps=27 format=3 uid="uid://vgwrcfy1qawf"]
 
 [ext_resource type="Script" path="res://scripts/ScreenManager.gd" id="1_j0luj"]
 [ext_resource type="Environment" uid="uid://jbptgqvstei3" path="res://scenes/main-environment.tres" id="1_yndf3"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://btjeo841ova2t" path="res://structures/lame_train_station.tres" id="5_gtw2o"]
 [ext_resource type="Texture2D" uid="uid://bvgtjp53uk3ew" path="res://sprites/mock ground.png" id="7_qm7v3"]
 [ext_resource type="Theme" uid="uid://bl156osrxywgc" path="res://Themes/UI_basic.tres" id="8_4xd1s"]
+[ext_resource type="Resource" uid="uid://cni68laod0fh1" path="res://structures/quick_park.tres" id="8_6sisp"]
 [ext_resource type="Script" path="res://scripts/view.gd" id="8_yovpv"]
 [ext_resource type="Texture2D" uid="uid://30w1bisvrlop" path="res://sprites/Empty Cube Frame.png" id="11_jg2f0"]
 [ext_resource type="PackedScene" uid="uid://d3nb03422bhm8" path="res://scenes/UI/BuildingOption.tscn" id="12_rekx4"]
@@ -19,6 +20,9 @@
 [ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="17_cjamx"]
 [ext_resource type="Script" path="res://scripts/SlotsScreen.gd" id="18_mnxko"]
 [ext_resource type="Texture2D" uid="uid://b10tyj5v3lrb7" path="res://sprites/Slots Grid.png" id="19_765b3"]
+[ext_resource type="Resource" uid="uid://b3drd17675biv" path="res://symbols/barrel.tres" id="19_kf2y6"]
+[ext_resource type="Resource" uid="uid://n54walsle5mh" path="res://symbols/empty.tres" id="19_qec0d"]
+[ext_resource type="Resource" uid="uid://4ue4p26r4ny8" path="res://symbols/coffee.tres" id="20_y8jx8"]
 [ext_resource type="PackedScene" uid="uid://bdel71gu6ck4c" path="res://scenes/UI/tile_control.tscn" id="21_s6w1x"]
 [ext_resource type="LabelSettings" uid="uid://cjate5pntbrh6" path="res://Themes/Big Panel Labels.tres" id="25_onqml"]
 
@@ -42,7 +46,7 @@ cash_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/H
 layer_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer2/Layer")
 days_til_rent_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer3/Day Value")
 rent_needed_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer4/Rent Due Value")
-structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_urdfe"), ExtResource("3_f54c0"), ExtResource("3_jcwrn"), ExtResource("4_l1jqv"), ExtResource("5_gtw2o")])
+structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_urdfe"), ExtResource("3_f54c0"), ExtResource("3_jcwrn"), ExtResource("4_l1jqv"), ExtResource("5_gtw2o"), ExtResource("8_6sisp")])
 selector = NodePath("Selector")
 selector_container = NodePath("Selector/Container")
 view_camera = NodePath("../View/Camera")
@@ -227,7 +231,8 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 text = "Another Day, Another Dollar"
 
-[node name="Slots Screen" type="PanelContainer" parent="CanvasLayer" node_paths=PackedStringArray("layer_info_group", "next_phase_button", "grid_0_0", "grid_0_1", "grid_0_2", "grid_0_3", "grid_1_0", "grid_1_1", "grid_1_2", "grid_1_3", "grid_2_0", "grid_2_1", "grid_2_2", "grid_2_3", "grid_3_0", "grid_3_1", "grid_3_2", "grid_3_3")]
+[node name="Slots Screen" type="PanelContainer" parent="CanvasLayer" node_paths=PackedStringArray("layer_info_group", "layer_label", "cash_label", "next_phase_button", "grid_0_0", "grid_0_1", "grid_0_2", "grid_0_3", "grid_1_0", "grid_1_1", "grid_1_2", "grid_1_3", "grid_2_0", "grid_2_1", "grid_2_2", "grid_2_3", "grid_3_0", "grid_3_1", "grid_3_2", "grid_3_3")]
+visible = false
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
@@ -242,6 +247,8 @@ theme = ExtResource("8_4xd1s")
 theme_type_variation = &"BigPanelContainer"
 script = ExtResource("18_mnxko")
 layer_info_group = NodePath("MarginContainer/VBoxContainer/HBoxContainer2")
+layer_label = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Layer")
+cash_label = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Cash")
 next_phase_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Next Phase Button")
 grid_0_0 = NodePath("Tiles Group/Tile Control 0 0")
 grid_0_1 = NodePath("Tiles Group/Tile Control 0 1")
@@ -259,6 +266,7 @@ grid_3_0 = NodePath("Tiles Group/Tile Control 3 0")
 grid_3_1 = NodePath("Tiles Group/Tile Control 3 1")
 grid_3_2 = NodePath("Tiles Group/Tile Control 3 2")
 grid_3_3 = NodePath("Tiles Group/Tile Control 3 3")
+symbols = Array[Resource("res://Symbol.gd")]([ExtResource("19_qec0d"), ExtResource("20_y8jx8"), ExtResource("19_kf2y6")])
 is_popup = true
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Slots Screen"]

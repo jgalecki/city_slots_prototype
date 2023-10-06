@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_jgvet")
 model = ExtResource("1_yvmxi")
-income = 0
+base_income = 0
 type = 0
 typeFamily = 0
 x_size = 0
@@ -14,3 +14,4 @@ z_size = 0
 y_size = 0
 rarity = 0
 description = ""
+symbols = Array[Resource("res://Symbol.gd")]([])

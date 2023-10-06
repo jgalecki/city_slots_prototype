@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Symbol" load_steps=3 format=3 uid="uid://4ue4p26r4ny8"]
+
+[ext_resource type="Script" path="res://Symbol.gd" id="1_i6qud"]
+[ext_resource type="Texture2D" uid="uid://bncsj78ffknnf" path="res://sprites/coffee.png" id="1_n4nuq"]
+
+[resource]
+script = ExtResource("1_i6qud")
+image = ExtResource("1_n4nuq")
+type = 0
+family = 0
+value = 1

@@ -2,9 +2,10 @@ extends Resource
 
 class_name Symbol
 
-enum Type { Coffee, Barrels }
-enum Family { Food, Goods, Culture }
+enum Types { Coffee, Barrels, Empty }
+enum Families { Food, Goods, Culture, Empty }
 
 @export var image:Texture2D # Image / png of the structure
-@export var type:Type
-@export var family:Family
+@export var type:Types
+@export var family:Families
+@export var value:int

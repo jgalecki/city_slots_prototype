@@ -37,19 +37,14 @@ func initialize():
 	placed_structures = []
 	grid_structures = []
 	planes = []
-	print("Outside loop: grid_structures has size of " + str(grid_structures.size()))
 	for y in range(5):
 		planes.append(Plane(Vector3.UP, Vector3(0, y, 0)))
 		grid_structures.append([])
-		print("y = " + str(y) + ": grid_structures has size of " + str(grid_structures.size()))
 		for z in range(4):
 			grid_structures[y].append([])
-			print("y = " + str(y) + ", z = " + str(z) + ": grid_structures[y] has size of " + str(grid_structures[y].size()))
 			for x in range(4):
 				grid_structures[y][z].append(structures[0])
-				print("y = " + str(y) + ", z = " + str(z) + ", x = " + str(x) + ": grid_structures[y][z] has size of " + str(grid_structures[y][z].size()))
 				
-	print("Outside loop: grid_structures has size of " + str(grid_structures.size()))
 	# print_grid_structures()
 	
 	# Create new MeshLibrary dynamically, can also be done in the editor
@@ -80,7 +75,7 @@ func initialize():
 	update_base_ui()	
 	
 	# good enough for now, random selection later...
-	building_options_screen.set_buildings(structures[2], structures[3], structures[4])
+	building_options_screen.set_buildings(structures[2], structures[5], structures[4])
 	screen_manager.add_screen(building_options_screen)
 
 func controlled_update(delta):
@@ -136,7 +131,7 @@ func action_build(gridmap_position:Vector3i):
 		
 		
 		var placed_structure = PlacedStructure.new(chosen_structure, get_facing_from_selector(), \
-									gridmap_position.x, gridmap_position.y, gridmap_position.z)
+									mesh_lib_index, gridmap_position.x, gridmap_position.y, gridmap_position.z)
 		
 		placed_structures.append(placed_structure)
 		gridmap.set_cell_item(gridmap_position, mesh_lib_index, gridmap.get_orthogonal_index_from_basis(selector.basis))
@@ -190,7 +185,7 @@ func update_structure(structure:Structure):
 	_model.position.y += 0.25
 	
 func update_base_ui():
-	cash_display.text = "$0"# + str(map.cash)
+	cash_display.text = "$" + str(map.cash)
 	layer_display.text = str(layer)
 	days_til_rent_display.text = str(taxman.days_until_tax(map.day))
 	rent_needed_display.text = str(taxman.tax_needed_for_next_rent(map.day))
@@ -244,8 +239,7 @@ func _on_layer_changed(new_layer):
 		for x in range(4):
 			var buildable = true
 			for y in range(layer + 1):	
-				print("y = " + str(y) + ", z = " + str(z) + ", x = " + str(x) + ": grid_structures[y][z][x] type is " + str(grid_structures[y][z][x].type))
-				if grid_structures[y][z][x].type == Structure.Type.Empty && in_build_mode:
+				if grid_structures[y][z][x].type == Structure.Types.Empty && in_build_mode:
 					var frameIndex = 1
 					if y == layer:
 						frameIndex = 0
@@ -285,13 +279,13 @@ func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 			for dx in range(structure.x_size):
 				var faced_dx = 0
 				var faced_dz = 0
-				if facing == structure.Facing.SW:
+				if facing == structure.Facings.SW:
 					faced_dx = dx
 					faced_dz = -1 * dz
-				elif facing == structure.Facing.SE:
+				elif facing == structure.Facings.SE:
 					faced_dx = -1 * dz
 					faced_dz = -1 * dx
-				elif facing == structure.Facing.NE:
+				elif facing == structure.Facings.NE:
 					faced_dx = -1 * dx
 					faced_dz = dz
 				else:
@@ -303,17 +297,17 @@ func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 						|| new_pos.z < 0 || new_pos.z > 3 	\
 						|| new_pos.y < 0 || new_pos.y > 4:
 					return true
-				if grid_structures[new_pos.y][new_pos.z][new_pos.x].Type != Structure.Type.Empty:
+				if grid_structures[new_pos.y][new_pos.z][new_pos.x].type != Structure.Types.Empty:
 					# Building already here
 					return true
-				if new_pos.y > 0 && grid_structures[new_pos.y - 1][new_pos.z][new_pos.x].Type == Structure.Type.Empty:
+				if new_pos.y > 0 && grid_structures[new_pos.y - 1][new_pos.z][new_pos.x].type == Structure.Types.Empty:
 					# Overhang or unsupported placement
 					return true
 					
 						
 	return false;
 
-func get_facing_from_selector() -> Structure.Facing:
+func get_facing_from_selector() -> Structure.Facings:
 	var orthoIndex = gridmap.get_orthogonal_index_from_basis(selector.basis)
 	# By experimental testing (and with standard facing), this function returns the following indices:
 	# SW: 0 -> SW
@@ -321,13 +315,13 @@ func get_facing_from_selector() -> Structure.Facing:
 	# NE: 10 -> NE
 	# NW: 22 -> NW
 	if orthoIndex == 0:
-		return Structure.Facing.SW
+		return Structure.Facings.SW
 	if orthoIndex == 16:
-		return Structure.Facing.SE
+		return Structure.Facings.SE
 	elif orthoIndex == 10:
-		return Structure.Facing.NE
+		return Structure.Facings.NE
 	else: # orthoIndex == 22:
-		return Structure.Facing.NW
+		return Structure.Facings.NW
 
 
 func _on_building_option_chosen(building):
@@ -343,7 +337,7 @@ func _on_start_slots_button_pressed():
 	for y in range(5):
 		for z in range(4):
 			for x in range(4):
-				if grid_structures[y][z][x].Type != Structure.Type.Empty:
+				if grid_structures[y][z][x].type != Structure.Types.Empty:
 					highest_y_layer = y
 					
 	
@@ -351,8 +345,13 @@ func _on_start_slots_button_pressed():
 	layer_changed.emit(highest_y_layer)
 	slots_screen.set_up(placed_structures, grid_structures, highest_y_layer)
 	screen_manager.add_screen(slots_screen)
+	start_slots_panel.visible = false
 
 
-func _on_slots_over():
+func _on_slots_over(cash_gained:int):
 	building_options_screen.set_buildings(structures[2], structures[3], structures[4])
 	screen_manager.add_screen(building_options_screen)
+	print("On day " + str(map.day) + ", player gained " + str(cash_gained))
+	map.cash += cash_gained
+	map.day += 1
+	update_base_ui()

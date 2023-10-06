@@ -55,7 +55,7 @@ func _on_start_slots_button_pressed():
 	hold_rotate = true
 
 
-func _on_slots_screen_slots_over():
+func _on_slots_screen_slots_over(cash_gained:int):
 	camera_x = 1.7
 	camera_z = 1.7
 	camera_position = Vector3(camera_x, camera_y, camera_z)

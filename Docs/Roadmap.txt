@@ -52,7 +52,7 @@ UI mockups
   xx Choice of 3 buildings
   xx Layer selection
   "Library" screen showing all symbols found so far
-  Symbol application
+  xx Symbol application
 xx UI: layer selection
 
 xx Basic models, pngs for 3 basic buildings
@@ -65,11 +65,11 @@ xx Different color cubes for empty frames on lower levels.
 xx Reimplemented screen management in Godot. At least, nothing's broken yet.  
   
 xx Populate Building Choice screen to 3 options
-Hook up button to actually placing a building
+xx Hook up button to actually placing a building
 
 Basic turn structure
-  Choose building
-  Place building
+  xx Choose building
+  xx Place building
   Inspect? (Button to continue)
   Symbol processing
   Check against weekly rent
