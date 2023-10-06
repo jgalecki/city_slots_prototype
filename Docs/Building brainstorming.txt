@@ -1,0 +1,4 @@
+Container - building that can be replaced / built into later on. 2x2. Uncommon.
+Recycling center - building that reverses directions of all symbols. Used once per turn. 2x2. Rare.
+Park - increases income of all nearby houses. 1x1. Common.
+An Actual Tree - doubles the effects of all neighboring parks. 1x1x2

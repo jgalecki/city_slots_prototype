@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://cfa2qflfmd50l"]
+
+[ext_resource type="Script" path="res://scripts/SlotsTile.gd" id="1_uxbw6"]
+[ext_resource type="Texture2D" uid="uid://c4e8l8hjoir0y" path="res://sprites/Tile Commercial.png" id="2_gkihj"]
+[ext_resource type="Texture2D" uid="uid://o01p3p1jw73" path="res://sprites/Tile Residential.png" id="3_4lte2"]
+[ext_resource type="Texture2D" uid="uid://bncsj78ffknnf" path="res://sprites/coffee.png" id="3_dnxmj"]
+[ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="4_84c6s"]
+[ext_resource type="Texture2D" uid="uid://bdog0v3qeeepb" path="res://sprites/Tile Park.png" id="4_vgsfi"]
+[ext_resource type="Texture2D" uid="uid://bchbb81f8c8wf" path="res://sprites/Tile Industrial.png" id="5_vee0l"]
+[ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="5_x6xgn"]
+[ext_resource type="Texture2D" uid="uid://bgb778xr6dgyb" path="res://sprites/Transportation Tile.png" id="6_6epc8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_q176i"]
+font = ExtResource("4_84c6s")
+font_size = 24
+shadow_color = Color(0, 0, 0, 0.392157)
+
+[node name="Tile Control" type="Control" node_paths=PackedStringArray("background_tile_image", "symbol_image", "cash_group", "cash_label")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 338.0
+offset_top = 27.0
+offset_right = 524.0
+offset_bottom = 149.0
+script = ExtResource("1_uxbw6")
+background_tile_image = NodePath("Background Tile Sprite")
+symbol_image = NodePath("Icons VBox/Symbol Sprite")
+cash_group = NodePath("Icons VBox/Cash Group")
+cash_label = NodePath("Icons VBox/Cash Group/CashLabel")
+tile_commercial = ExtResource("2_gkihj")
+tile_residential = ExtResource("3_4lte2")
+tile_park = ExtResource("4_vgsfi")
+tile_industrial = ExtResource("5_vee0l")
+tile_transportation = ExtResource("6_6epc8")
+
+[node name="Background Tile Sprite" type="TextureRect" parent="."]
+layout_mode = 2
+offset_right = 186.0
+offset_bottom = 122.0
+texture = ExtResource("2_gkihj")
+
+[node name="Icons VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_right = -58.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Symbol Sprite" type="TextureRect" parent="Icons VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("3_dnxmj")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="Cash Group" type="HBoxContainer" parent="Icons VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="CashLabel" type="Label" parent="Icons VBox/Cash Group"]
+layout_mode = 2
+text = "5x"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="CashIcon" type="TextureRect" parent="Icons VBox/Cash Group"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+texture = ExtResource("5_x6xgn")
+expand_mode = 2

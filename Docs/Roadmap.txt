@@ -2,7 +2,7 @@ Week 1: Basic UI and placement. Layer selection and display. Background Grid. Ra
 Symbol count: 1
 Building count: 3
 
-Week 2: UI Popup display when hovering over a building in playing grid or selection options. Generation of new symbols (not just money) and interactions with buildings underneath, layer by layer. Adjacency effects for buildings. Weekly 'rent' objectives, winning and losing conditions
+Week 2: UI Popup display when hovering over a building in playing grid or selection options. Generation of new symbols (not just money) and interactions with buildings underneath, layer by layer. Adjacency effects for buildings. Weekly 'rent' objectives, winning and losing conditions. Decide on color palette and city 'theme'.
 Symbol count: 3
 Building count: 3
 
@@ -49,11 +49,30 @@ xx Background Grid display. Cubes?
 
 xx Zoom in camera?
 UI mockups
-  Choice of 3 buildings
-  Layer selection
-  "Library" screen
-  Symbol
+  xx Choice of 3 buildings
+  xx Layer selection
+  "Library" screen showing all symbols found so far
+  Symbol application
 xx UI: layer selection
+
+xx Basic models, pngs for 3 basic buildings
+
+xx Move from grid_structures building index for source of truth to building collection
+  xx Construct gridmap and grid_structures from buildings collection
+xx Restrict building placement based on orientation / support underneath  
+xx Different color cubes for empty frames on lower levels.  
+  
+xx Reimplemented screen management in Godot. At least, nothing's broken yet.  
+  
+xx Populate Building Choice screen to 3 options
+Hook up button to actually placing a building
+
+Basic turn structure
+  Choose building
+  Place building
+  Inspect? (Button to continue)
+  Symbol processing
+  Check against weekly rent
 
 =============================================================
 Model import: Creating a 4x4x4 block building

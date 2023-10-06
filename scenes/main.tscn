@@ -1,15 +1,26 @@
-[gd_scene load_steps=12 format=3 uid="uid://vgwrcfy1qawf"]
+[gd_scene load_steps=23 format=3 uid="uid://vgwrcfy1qawf"]
 
-[ext_resource type="Script" path="res://scripts/builder.gd" id="1_jybm7"]
+[ext_resource type="Script" path="res://scripts/ScreenManager.gd" id="1_j0luj"]
 [ext_resource type="Environment" uid="uid://jbptgqvstei3" path="res://scenes/main-environment.tres" id="1_yndf3"]
 [ext_resource type="Resource" uid="uid://d0trbdqq16fqv" path="res://structures/empty_frame.tres" id="2_urdfe"]
+[ext_resource type="Script" path="res://scripts/CityScreen.gd" id="2_wy2xj"]
+[ext_resource type="Resource" uid="uid://ce52ifcjrtlfu" path="res://structures/empty_frame_darker.tres" id="3_f54c0"]
+[ext_resource type="Resource" uid="uid://md7kr6toqb6r" path="res://structures/lame_apartment.tres" id="3_jcwrn"]
+[ext_resource type="Resource" uid="uid://cjp4veltwvru1" path="res://structures/lame_cafe.tres" id="4_l1jqv"]
 [ext_resource type="Texture2D" uid="uid://cbk07cxgshg26" path="res://sprites/selector.png" id="4_wr1wv"]
+[ext_resource type="Resource" uid="uid://btjeo841ova2t" path="res://structures/lame_train_station.tres" id="5_gtw2o"]
 [ext_resource type="Texture2D" uid="uid://bvgtjp53uk3ew" path="res://sprites/mock ground.png" id="7_qm7v3"]
+[ext_resource type="Theme" uid="uid://bl156osrxywgc" path="res://Themes/UI_basic.tres" id="8_4xd1s"]
 [ext_resource type="Script" path="res://scripts/view.gd" id="8_yovpv"]
-[ext_resource type="Texture2D" uid="uid://30w1bisvrlop" path="res://models/Empty Cube Frame.png" id="9_7f0fi"]
+[ext_resource type="Texture2D" uid="uid://30w1bisvrlop" path="res://sprites/Empty Cube Frame.png" id="11_jg2f0"]
+[ext_resource type="PackedScene" uid="uid://d3nb03422bhm8" path="res://scenes/UI/BuildingOption.tscn" id="12_rekx4"]
+[ext_resource type="Script" path="res://scripts/BuildingOptionsScreen.gd" id="16_umju5"]
 [ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="16_vlub6"]
-[ext_resource type="Resource" uid="uid://ckqfo3lvdk661" path="res://structures/test_house.tres" id="17_aj26o"]
 [ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="17_cjamx"]
+[ext_resource type="Script" path="res://scripts/SlotsScreen.gd" id="18_mnxko"]
+[ext_resource type="Texture2D" uid="uid://b10tyj5v3lrb7" path="res://sprites/Slots Grid.png" id="19_765b3"]
+[ext_resource type="PackedScene" uid="uid://bdel71gu6ck4c" path="res://scenes/UI/tile_control.tscn" id="21_s6w1x"]
+[ext_resource type="LabelSettings" uid="uid://cjate5pntbrh6" path="res://Themes/Big Panel Labels.tres" id="25_onqml"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_q176i"]
 font = ExtResource("16_vlub6")
@@ -18,15 +29,25 @@ shadow_color = Color(0, 0, 0, 0.392157)
 
 [node name="Main" type="Node3D"]
 
-[node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("selector", "selector_container", "view_camera", "gridmap", "cash_display", "layer_display")]
-script = ExtResource("1_jybm7")
-structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_urdfe"), ExtResource("17_aj26o")])
+[node name="ScreenManager" type="Node3D" parent="." node_paths=PackedStringArray("initial_screen")]
+script = ExtResource("1_j0luj")
+initial_screen = NodePath("../Builder")
+
+[node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("building_options_screen", "slots_screen", "start_slots_panel", "cash_display", "layer_display", "days_til_rent_display", "rent_needed_display", "selector", "selector_container", "view_camera", "gridmap")]
+script = ExtResource("2_wy2xj")
+building_options_screen = NodePath("../CanvasLayer/Building Options Screen")
+slots_screen = NodePath("../CanvasLayer/Slots Screen")
+start_slots_panel = NodePath("../CanvasLayer/Next Turn Panel")
+cash_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer/Cash")
+layer_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer2/Layer")
+days_til_rent_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer3/Day Value")
+rent_needed_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer4/Rent Due Value")
+structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_urdfe"), ExtResource("3_f54c0"), ExtResource("3_jcwrn"), ExtResource("4_l1jqv"), ExtResource("5_gtw2o")])
 selector = NodePath("Selector")
 selector_container = NodePath("Selector/Container")
 view_camera = NodePath("../View/Camera")
 gridmap = NodePath("../GridMap")
-cash_display = NodePath("../CanvasLayer/VBoxContainer/Cash Control/Cash")
-layer_display = NodePath("../CanvasLayer/VBoxContainer/Layer Control/Layer")
+is_base_screen = true
 
 [node name="Selector" type="Node3D" parent="Builder"]
 
@@ -38,7 +59,7 @@ texture = ExtResource("4_wr1wv")
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="Ground" type="Sprite3D" parent="Builder"]
-transform = Transform3D(40, 0, 0, 0, -1.74846e-06, -40, 0, 40, -1.74846e-06, 0, 0, 0)
+transform = Transform3D(100, 0, 0, 0, -4.37114e-06, -100, 0, 100, -4.37114e-06, 0, 0, 0)
 texture = ExtResource("7_qm7v3")
 
 [node name="View" type="Node3D" parent="."]
@@ -64,56 +85,374 @@ shadow_opacity = 0.75
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-offset_right = 177.0
-offset_bottom = 99.0
+[node name="UI Stats" type="PanelContainer" parent="CanvasLayer"]
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 222.0
+offset_bottom = 146.0
+theme = ExtResource("8_4xd1s")
 
-[node name="Cash Control" type="Control" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UI Stats"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI Stats/MarginContainer"]
 layout_mode = 2
 
-[node name="CashIcon" type="TextureRect" parent="CanvasLayer/VBoxContainer/Cash Control"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 24.0
-offset_right = 148.0
-offset_bottom = 152.0
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("17_cjamx")
-expand_mode = 4
-
-[node name="Cash" type="Label" parent="CanvasLayer/VBoxContainer/Cash Control"]
-layout_mode = 0
-offset_left = 69.0
-offset_top = 27.0
-offset_right = 270.0
-offset_bottom = 101.0
-text = "$10,000"
-label_settings = SubResource("LabelSettings_q176i")
-
-[node name="Layer Control" type="Control" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Layer Icon" type="TextureRect" parent="CanvasLayer/VBoxContainer/Layer Control"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 24.0
-offset_right = 148.0
-offset_bottom = 152.0
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("9_7f0fi")
+[node name="CashIcon" type="TextureRect" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("17_cjamx")
 expand_mode = 2
 
-[node name="Layer" type="Label" parent="CanvasLayer/VBoxContainer/Layer Control"]
-layout_mode = 0
-offset_left = 69.0
-offset_top = 27.0
-offset_right = 270.0
-offset_bottom = 101.0
+[node name="Cash" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "$10,000"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Layer Icon" type="TextureRect" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("11_jg2f0")
+expand_mode = 2
+
+[node name="Layer" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
 text = "1"
 label_settings = SubResource("LabelSettings_q176i")
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Day Label" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Days Til Rent: "
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="Day Value" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "1"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Rent Due Label" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Rent Due: "
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="Rent Due Value" type="Label" parent="CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "1"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="Building Options Screen" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("options_panel_a", "options_panel_b", "options_panel_c")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 165.0
+offset_top = 96.0
+offset_right = -90.0
+offset_bottom = -93.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("8_4xd1s")
+script = ExtResource("16_umju5")
+options_panel_a = NodePath("HBoxContainer/Building Option A")
+options_panel_b = NodePath("HBoxContainer/Building Option B")
+options_panel_c = NodePath("HBoxContainer/Building Option C")
+is_passthrough_popup = null
+is_popup = null
+is_pause_screen = true
+is_base_screen = null
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Building Options Screen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+
+[node name="Building Option A" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[node name="Spacer 1" type="Control" parent="CanvasLayer/Building Options Screen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Building Option B" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[node name="Spacer 2" type="Control" parent="CanvasLayer/Building Options Screen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Building Option C" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[node name="Next Turn Panel" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+anchors_preset = -1
+anchor_left = 0.542
+anchor_top = 1.0
+anchor_right = 0.542
+anchor_bottom = 1.0
+offset_left = -216.64
+offset_top = -124.0
+offset_right = 223.36
+offset_bottom = -29.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Next Turn Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Start Slots Button" type="Button" parent="CanvasLayer/Next Turn Panel/MarginContainer"]
+layout_mode = 2
+text = "Another Day, Another Dollar"
+
+[node name="Slots Screen" type="PanelContainer" parent="CanvasLayer" node_paths=PackedStringArray("layer_info_group", "next_phase_button", "grid_0_0", "grid_0_1", "grid_0_2", "grid_0_3", "grid_1_0", "grid_1_1", "grid_1_2", "grid_1_3", "grid_2_0", "grid_2_1", "grid_2_2", "grid_2_3", "grid_3_0", "grid_3_1", "grid_3_2", "grid_3_3")]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -889.0
+offset_top = 15.0
+offset_right = -16.0
+offset_bottom = -227.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("8_4xd1s")
+theme_type_variation = &"BigPanelContainer"
+script = ExtResource("18_mnxko")
+layer_info_group = NodePath("MarginContainer/VBoxContainer/HBoxContainer2")
+next_phase_button = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Next Phase Button")
+grid_0_0 = NodePath("Tiles Group/Tile Control 0 0")
+grid_0_1 = NodePath("Tiles Group/Tile Control 0 1")
+grid_0_2 = NodePath("Tiles Group/Tile Control 0 2")
+grid_0_3 = NodePath("Tiles Group/Tile Control 0 3")
+grid_1_0 = NodePath("Tiles Group/Tile Control 1 0")
+grid_1_1 = NodePath("Tiles Group/Tile Control 1 1")
+grid_1_2 = NodePath("Tiles Group/Tile Control 1 2")
+grid_1_3 = NodePath("Tiles Group/Tile Control 1 3")
+grid_2_0 = NodePath("Tiles Group/Tile Control 2 0")
+grid_2_1 = NodePath("Tiles Group/Tile Control 2 1")
+grid_2_2 = NodePath("Tiles Group/Tile Control 2 2")
+grid_2_3 = NodePath("Tiles Group/Tile Control 2 3")
+grid_3_0 = NodePath("Tiles Group/Tile Control 3 0")
+grid_3_1 = NodePath("Tiles Group/Tile Control 3 1")
+grid_3_2 = NodePath("Tiles Group/Tile Control 3 2")
+grid_3_3 = NodePath("Tiles Group/Tile Control 3 3")
+is_popup = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Slots Screen"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Slots Screen/MarginContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("19_765b3")
+
+[node name="Control" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Control2" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Layer Icon" type="TextureRect" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("11_jg2f0")
+expand_mode = 2
+
+[node name="Layer" type="Label" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("8_4xd1s")
+theme_override_fonts/font = ExtResource("16_vlub6")
+theme_override_font_sizes/font_size = 36
+text = "5"
+label_settings = ExtResource("25_onqml")
+
+[node name="Control" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CashIcon" type="TextureRect" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("17_cjamx")
+expand_mode = 2
+
+[node name="Cash" type="Label" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("25_onqml")
+
+[node name="Control3" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Next Phase Button" type="Button" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "Next Phase"
+
+[node name="Control3" type="Control" parent="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Tiles Group" type="Control" parent="CanvasLayer/Slots Screen"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Tile Control 0 0" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+
+[node name="Tile Control 0 1" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 235.0
+offset_top = 91.0
+offset_right = 422.0
+offset_bottom = 216.0
+
+[node name="Tile Control 0 2" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 133.0
+offset_top = 157.0
+offset_right = 320.0
+offset_bottom = 282.0
+
+[node name="Tile Control 0 3" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 31.0
+offset_top = 223.0
+offset_right = 218.0
+offset_bottom = 348.0
+
+[node name="Tile Control 1 0" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 438.0
+offset_top = 92.0
+offset_right = 625.0
+offset_bottom = 217.0
+
+[node name="Tile Control 1 1" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 337.0
+offset_top = 158.0
+offset_right = 524.0
+offset_bottom = 283.0
+
+[node name="Tile Control 1 2" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 235.0
+offset_top = 224.0
+offset_right = 422.0
+offset_bottom = 349.0
+
+[node name="Tile Control 1 3" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 133.0
+offset_top = 290.0
+offset_right = 320.0
+offset_bottom = 415.0
+
+[node name="Tile Control 2 0" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 539.0
+offset_top = 157.0
+offset_right = 726.0
+offset_bottom = 282.0
+
+[node name="Tile Control 2 1" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 438.0
+offset_top = 223.0
+offset_right = 625.0
+offset_bottom = 348.0
+
+[node name="Tile Control 2 2" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_top = 289.0
+offset_bottom = 414.0
+
+[node name="Tile Control 2 3" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 234.0
+offset_top = 355.0
+offset_right = 421.0
+offset_bottom = 480.0
+
+[node name="Tile Control 3 0" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 640.0
+offset_top = 223.0
+offset_right = 827.0
+offset_bottom = 348.0
+
+[node name="Tile Control 3 1" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 539.0
+offset_top = 289.0
+offset_right = 726.0
+offset_bottom = 414.0
+
+[node name="Tile Control 3 2" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 437.0
+offset_top = 355.0
+offset_right = 624.0
+offset_bottom = 480.0
+
+[node name="Tile Control 3 3" parent="CanvasLayer/Slots Screen/Tiles Group" instance=ExtResource("21_s6w1x")]
+offset_left = 335.0
+offset_top = 421.0
+offset_right = 522.0
+offset_bottom = 546.0
+
 [connection signal="layer_changed" from="Builder" to="Builder" method="_on_layer_changed"]
-[connection signal="layer_changed" from="Builder" to="View" method="_on_builder_layer_changed"]
+[connection signal="layer_changed" from="Builder" to="View" method="_on_city_screen_layer_changed"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option A" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option A" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option B" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option B" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option C" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option C" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]
+[connection signal="pressed" from="CanvasLayer/Next Turn Panel/MarginContainer/Start Slots Button" to="Builder" method="_on_start_slots_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Next Turn Panel/MarginContainer/Start Slots Button" to="View" method="_on_start_slots_button_pressed"]
+[connection signal="layer_changed" from="CanvasLayer/Slots Screen" to="Builder" method="_on_layer_changed"]
+[connection signal="layer_changed" from="CanvasLayer/Slots Screen" to="View" method="_on_city_screen_layer_changed"]
+[connection signal="layer_changed" from="CanvasLayer/Slots Screen" to="CanvasLayer/Slots Screen" method="_on_layer_changed"]
+[connection signal="slots_over" from="CanvasLayer/Slots Screen" to="Builder" method="_on_slots_over"]
+[connection signal="slots_over" from="CanvasLayer/Slots Screen" to="View" method="_on_slots_screen_slots_over"]
+[connection signal="pressed" from="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer/Next Phase Button" to="CanvasLayer/Slots Screen" method="_on_next_phase_button_pressed"]

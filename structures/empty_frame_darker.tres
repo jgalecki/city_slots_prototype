@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Structure" load_steps=3 format=3 uid="uid://ce52ifcjrtlfu"]
+
+[ext_resource type="PackedScene" uid="uid://dt1nbmqdmugkp" path="res://models/Empty Cube Frame Darker.glb" id="1_yvmxi"]
+[ext_resource type="Script" path="res://scripts/structure.gd" id="2_jgvet"]
+
+[resource]
+script = ExtResource("2_jgvet")
+model = ExtResource("1_yvmxi")
+income = 0
+type = 0
+typeFamily = 0
+x_size = 0
+z_size = 0
+y_size = 0
+rarity = 0
+description = ""

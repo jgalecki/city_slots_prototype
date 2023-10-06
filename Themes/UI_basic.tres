@@ -1,0 +1,30 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bl156osrxywgc"]
+
+[ext_resource type="Texture2D" uid="uid://bukrt1ni8d4x0" path="res://sprites/Background_2.png" id="1_gu8wp"]
+[ext_resource type="Texture2D" uid="uid://bypgakijpmwdj" path="res://sprites/Background_3.png" id="1_jmqj4"]
+[ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="2_2qgup"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y3qrb"]
+texture = ExtResource("1_jmqj4")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8wd4v"]
+texture = ExtResource("1_gu8wp")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+
+[resource]
+BigPanelContainer/base_type = &"PanelContainer"
+BigPanelContainer/styles/panel = SubResource("StyleBoxTexture_y3qrb")
+Button/font_sizes/font_size = 28
+HeaderLarge/font_sizes/font_size = 48
+Label/font_sizes/font_size = 28
+Label/fonts/font = ExtResource("2_2qgup")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_8wd4v")
+RichTextLabel/font_sizes/bold_font_size = 28
+RichTextLabel/font_sizes/normal_font_size = 28

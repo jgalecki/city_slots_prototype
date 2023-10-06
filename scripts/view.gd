@@ -2,13 +2,23 @@ extends Node3D
 
 var camera_position:Vector3
 var camera_rotation:Vector3
+var camera_x:float
+var camera_z:float
+var camera_y:float
+var initial_camera_rotation:Vector3
+
+var hold_rotate:bool
 
 @onready var camera = $Camera
 
 func _ready():
 	
 	camera_rotation = rotation_degrees # Initial rotation
-	camera_position = Vector3(1.7, 0, 1.7)
+	initial_camera_rotation = rotation_degrees
+	camera_x = 1.7
+	camera_z = 1.7
+	camera_y = 0
+	camera_position = Vector3(camera_x, camera_y, camera_z)
 	pass
 
 func _process(delta):
@@ -20,24 +30,12 @@ func _process(delta):
 	
 	# handle_input(delta)
 
-# Handle input
-
-func handle_input(_delta):
-	
-	# Rotation
-	
-	var input := Vector3.ZERO
-	
-	input.x = Input.get_axis("camera_left", "camera_right")
-	input.z = Input.get_axis("camera_forward", "camera_back")
-	
-	input = input.rotated(Vector3.UP, rotation.y).normalized()
-	
-	camera_position += input / 4
 
 func _input(event):
 	
 	# Rotate camera using mouse (hold 'middle' mouse button)
+	if hold_rotate:
+		return
 	
 	if event is InputEventMouseMotion:
 		if Input.is_action_pressed("camera_rotate"):
@@ -45,5 +43,20 @@ func _input(event):
 
 
 
-func _on_builder_layer_changed(new_layer):
-	camera_position = Vector3(1.7, new_layer , 1.7)
+func _on_city_screen_layer_changed(new_layer):
+	camera_y = new_layer * 1.2
+	camera_position = Vector3(camera_x, camera_y, camera_z)
+
+func _on_start_slots_button_pressed():
+	camera_x = 5
+	camera_z = -1.6
+	camera_position = Vector3(camera_x, camera_y, camera_z)
+	camera_rotation = initial_camera_rotation
+	hold_rotate = true
+
+
+func _on_slots_screen_slots_over():
+	camera_x = 1.7
+	camera_z = 1.7
+	camera_position = Vector3(camera_x, camera_y, camera_z)
+	hold_rotate = false

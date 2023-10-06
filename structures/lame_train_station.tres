@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Structure" load_steps=4 format=3 uid="uid://btjeo841ova2t"]
+
+[ext_resource type="PackedScene" uid="uid://hyrmhlbc751x" path="res://models/lame_train_station.glb" id="1_02du8"]
+[ext_resource type="Texture2D" uid="uid://bptox01s8gusx" path="res://sprites/lame_train_station.png" id="1_rw7k8"]
+[ext_resource type="Script" path="res://scripts/structure.gd" id="2_c8rvr"]
+
+[resource]
+script = ExtResource("2_c8rvr")
+model = ExtResource("1_02du8")
+image = ExtResource("1_rw7k8")
+income = 0
+type = 2
+typeFamily = 3
+x_size = 2
+z_size = 1
+y_size = 1
+rarity = 1
+description = "A [color=cyan]TRANSPORT[color=white] hub for the neighborhood.
+
+Creates two [color=pink]BARREL[color=white] symbols per turn. If a [color=pink]GOODS[color=white] symbol passes through, it is destroyed and creates $5."

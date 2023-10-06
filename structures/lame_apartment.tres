@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Structure" load_steps=4 format=3 uid="uid://md7kr6toqb6r"]
+
+[ext_resource type="PackedScene" uid="uid://brc1hb4ffh75u" path="res://models/lame_apartment.glb" id="1_dio37"]
+[ext_resource type="Texture2D" uid="uid://dmo1a6lyrs2a6" path="res://sprites/lame_apartment.png" id="1_lman0"]
+[ext_resource type="Script" path="res://scripts/structure.gd" id="2_bmmc4"]
+
+[resource]
+script = ExtResource("2_bmmc4")
+model = ExtResource("1_dio37")
+image = ExtResource("1_lman0")
+income = 1
+type = 1
+typeFamily = 1
+x_size = 1
+z_size = 1
+y_size = 1
+rarity = 0
+description = "A cozy and comfortable [color=cyan]RESIDENTIAL[color=white] apartment.
+
+Apartments don't create symbols or modify passing symbols. Their income value is often modified by their neighbors."

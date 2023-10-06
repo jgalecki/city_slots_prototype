@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3nb03422bhm8"]
+
+[ext_resource type="Theme" uid="uid://bl156osrxywgc" path="res://Themes/UI_basic.tres" id="1_fm3m7"]
+[ext_resource type="Script" path="res://scripts/BuildingOptionPanel.gd" id="2_ijpd5"]
+[ext_resource type="Texture2D" uid="uid://30w1bisvrlop" path="res://sprites/Empty Cube Frame.png" id="3_wpn8x"]
+[ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="4_sxypd"]
+
+[node name="Building Option Panel" type="PanelContainer" node_paths=PackedStringArray("building_name_label", "building_rarity_label", "building_dimensions_label", "building_income_label", "building_description_label", "building_image", "build_button")]
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
+theme = ExtResource("1_fm3m7")
+theme_type_variation = &"BigPanelContainer"
+script = ExtResource("2_ijpd5")
+building_name_label = NodePath("MarginContainer/VBoxContainer/Building Name")
+building_rarity_label = NodePath("MarginContainer/VBoxContainer/Building Rarity")
+building_dimensions_label = NodePath("MarginContainer/VBoxContainer/Building Dimensions")
+building_income_label = NodePath("MarginContainer/VBoxContainer/Income Group/Income Label")
+building_description_label = NodePath("MarginContainer/VBoxContainer/MarginContainer2/Building Description")
+building_image = NodePath("MarginContainer/VBoxContainer/MarginContainer/Building Picture")
+build_button = NodePath("MarginContainer/VBoxContainer/Build Button")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Building Name" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+text = "BUILDING NAME"
+horizontal_alignment = 1
+
+[node name="Building Rarity" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center][b][color=gray]Common"
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_right = 64
+
+[node name="Building Picture" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("3_wpn8x")
+expand_mode = 5
+
+[node name="Building Dimensions" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Dimensions: 1 x 1 x 1
+"
+horizontal_alignment = 1
+
+[node name="Income Group" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Income Icon" type="TextureRect" parent="MarginContainer/VBoxContainer/Income Group"]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("4_sxypd")
+expand_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/Income Group"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Income Label" type="Label" parent="MarginContainer/VBoxContainer/Income Group"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "$1"
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Building Description" type="RichTextLabel" parent="MarginContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "A cozy and comfortable [color=cyan]RESIDENTIAL[color=white] apartment.
+
+Apartments don't create symbols or modify passing symbols. Their income value is often modified by their neighbors."
+
+[node name="Build Button" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "BUILD"

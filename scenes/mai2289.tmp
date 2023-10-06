@@ -1,0 +1,188 @@
+[gd_scene load_steps=19 format=3 uid="uid://vgwrcfy1qawf"]
+
+[ext_resource type="Script" path="res://scripts/ScreenManager.gd" id="1_j0luj"]
+[ext_resource type="Environment" uid="uid://jbptgqvstei3" path="res://scenes/main-environment.tres" id="1_yndf3"]
+[ext_resource type="Resource" uid="uid://d0trbdqq16fqv" path="res://structures/empty_frame.tres" id="2_urdfe"]
+[ext_resource type="Script" path="res://scripts/CityScreen.gd" id="2_wy2xj"]
+[ext_resource type="Resource" uid="uid://ce52ifcjrtlfu" path="res://structures/empty_frame_darker.tres" id="3_f54c0"]
+[ext_resource type="Resource" uid="uid://md7kr6toqb6r" path="res://structures/lame_apartment.tres" id="3_jcwrn"]
+[ext_resource type="Resource" uid="uid://cjp4veltwvru1" path="res://structures/lame_cafe.tres" id="4_l1jqv"]
+[ext_resource type="Texture2D" uid="uid://cbk07cxgshg26" path="res://sprites/selector.png" id="4_wr1wv"]
+[ext_resource type="Resource" uid="uid://btjeo841ova2t" path="res://structures/lame_train_station.tres" id="5_gtw2o"]
+[ext_resource type="Texture2D" uid="uid://bvgtjp53uk3ew" path="res://sprites/mock ground.png" id="7_qm7v3"]
+[ext_resource type="Theme" uid="uid://bl156osrxywgc" path="res://Themes/UI_basic.tres" id="8_4xd1s"]
+[ext_resource type="Script" path="res://scripts/view.gd" id="8_yovpv"]
+[ext_resource type="Texture2D" uid="uid://30w1bisvrlop" path="res://sprites/Empty Cube Frame.png" id="11_jg2f0"]
+[ext_resource type="PackedScene" uid="uid://d3nb03422bhm8" path="res://scenes/UI/BuildingOption.tscn" id="12_rekx4"]
+[ext_resource type="Script" path="res://scripts/BuildingOptionsScreen.gd" id="16_umju5"]
+[ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="16_vlub6"]
+[ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="17_cjamx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_q176i"]
+font = ExtResource("16_vlub6")
+font_size = 24
+shadow_color = Color(0, 0, 0, 0.392157)
+
+[node name="Main" type="Node3D"]
+
+[node name="ScreenManager" type="Node3D" parent="." node_paths=PackedStringArray("initial_screen")]
+script = ExtResource("1_j0luj")
+initial_screen = NodePath("../Builder")
+
+[node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("building_options_screen", "selector", "selector_container", "view_camera", "gridmap", "cash_display", "layer_display")]
+script = ExtResource("2_wy2xj")
+building_options_screen = NodePath("../CanvasLayer/Building Options Screen")
+structures = Array[Resource("res://scripts/structure.gd")]([ExtResource("2_urdfe"), ExtResource("3_f54c0"), ExtResource("3_jcwrn"), ExtResource("4_l1jqv"), ExtResource("5_gtw2o")])
+selector = NodePath("Selector")
+selector_container = NodePath("Selector/Container")
+view_camera = NodePath("../View/Camera")
+gridmap = NodePath("../GridMap")
+cash_display = NodePath("../CanvasLayer/UI Stats/VBoxContainer/Cash Control/Cash")
+layer_display = NodePath("../CanvasLayer/UI Stats/VBoxContainer/Layer Control/Layer")
+is_base_screen = true
+
+[node name="Selector" type="Node3D" parent="Builder"]
+
+[node name="Sprite" type="Sprite3D" parent="Builder/Selector"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.06, 0)
+texture = ExtResource("4_wr1wv")
+
+[node name="Container" type="Node3D" parent="Builder/Selector"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+
+[node name="Ground" type="Sprite3D" parent="Builder"]
+transform = Transform3D(100, 0, 0, 0, -4.37114e-06, -100, 0, 100, -4.37114e-06, 0, 0, 0)
+texture = ExtResource("7_qm7v3")
+
+[node name="View" type="Node3D" parent="."]
+transform = Transform3D(0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573576, -0.707107, -0.40558, 0.579228, 0, 0, 0)
+script = ExtResource("8_yovpv")
+
+[node name="Camera" type="Camera3D" parent="View"]
+transform = Transform3D(1, 0, 0, 0, 1, 7.15256e-07, 0, 0, 1, 0, 9.53674e-07, 30)
+environment = ExtResource("1_yndf3")
+fov = 20.0
+
+[node name="GridMap" type="GridMap" parent="."]
+cell_size = Vector3(1.2, 1.2, 1.2)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+cell_scale = 0.25
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.422618, -0.694272, 0.582563, 0, 0.642788, 0.766044, -0.906308, 0.323744, -0.271654, 0, 0, 0)
+shadow_enabled = true
+shadow_opacity = 0.75
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI Stats" type="PanelContainer" parent="CanvasLayer"]
+offset_right = 207.0
+offset_bottom = 131.0
+theme = ExtResource("8_4xd1s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI Stats"]
+layout_mode = 2
+
+[node name="Cash Control" type="Control" parent="CanvasLayer/UI Stats/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="CashIcon" type="TextureRect" parent="CanvasLayer/UI Stats/VBoxContainer/Cash Control"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 24.0
+offset_right = 148.0
+offset_bottom = 152.0
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("17_cjamx")
+expand_mode = 4
+
+[node name="Cash" type="Label" parent="CanvasLayer/UI Stats/VBoxContainer/Cash Control"]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 27.0
+offset_right = 270.0
+offset_bottom = 101.0
+text = "$10,000"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="Layer Control" type="Control" parent="CanvasLayer/UI Stats/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Layer Icon" type="TextureRect" parent="CanvasLayer/UI Stats/VBoxContainer/Layer Control"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 24.0
+offset_right = 148.0
+offset_bottom = 152.0
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("11_jg2f0")
+expand_mode = 2
+
+[node name="Layer" type="Label" parent="CanvasLayer/UI Stats/VBoxContainer/Layer Control"]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 27.0
+offset_right = 270.0
+offset_bottom = 101.0
+text = "1"
+label_settings = SubResource("LabelSettings_q176i")
+
+[node name="Building Options Screen" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("options_panel_a", "options_panel_b", "options_panel_c")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 165.0
+offset_top = 96.0
+offset_right = -90.0
+offset_bottom = -93.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("8_4xd1s")
+script = ExtResource("16_umju5")
+options_panel_a = NodePath("")
+options_panel_b = NodePath("")
+options_panel_c = NodePath("")
+is_passthrough_popup = null
+is_popup = null
+is_pause_screen = true
+is_base_screen = null
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Building Options Screen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+
+[node name="Building Option A" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[node name="Spacer 1" type="Control" parent="CanvasLayer/Building Options Screen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Building Option B" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[node name="Spacer 2" type="Control" parent="CanvasLayer/Building Options Screen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Building Option C" parent="CanvasLayer/Building Options Screen/HBoxContainer" instance=ExtResource("12_rekx4")]
+layout_mode = 2
+
+[connection signal="layer_changed" from="Builder" to="Builder" method="_on_layer_changed"]
+[connection signal="layer_changed" from="Builder" to="View" method="_on_city_screen_layer_changed"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option A" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option A" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option B" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option B" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option C" to="Builder" method="_on_building_option_chosen"]
+[connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option C" to="CanvasLayer/Building Options Screen" method="_on_building_option_chosen"]

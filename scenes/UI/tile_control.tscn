@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://bdel71gu6ck4c"]
+
+[ext_resource type="Script" path="res://scripts/SlotsTile.gd" id="1_d1p4w"]
+[ext_resource type="Texture2D" uid="uid://c4e8l8hjoir0y" path="res://sprites/Tile Commercial.png" id="2_1tn3u"]
+[ext_resource type="Texture2D" uid="uid://o01p3p1jw73" path="res://sprites/Tile Residential.png" id="3_12d2r"]
+[ext_resource type="Texture2D" uid="uid://bdog0v3qeeepb" path="res://sprites/Tile Park.png" id="4_1d6ad"]
+[ext_resource type="Texture2D" uid="uid://bchbb81f8c8wf" path="res://sprites/Tile Industrial.png" id="5_4r32j"]
+[ext_resource type="Texture2D" uid="uid://bgb778xr6dgyb" path="res://sprites/Transportation Tile.png" id="6_bsa4a"]
+[ext_resource type="Texture2D" uid="uid://bncsj78ffknnf" path="res://sprites/coffee.png" id="7_dfxak"]
+[ext_resource type="LabelSettings" uid="uid://cjate5pntbrh6" path="res://Themes/Big Panel Labels.tres" id="8_qrk77"]
+[ext_resource type="Texture2D" uid="uid://bng0d1sou7c8a" path="res://sprites/coin.png" id="9_76nhr"]
+
+[node name="Tile Control" type="Control" node_paths=PackedStringArray("background_tile_image", "symbol_image", "cash_group", "cash_label")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 336.0
+offset_top = 25.0
+offset_right = 523.0
+offset_bottom = 150.0
+script = ExtResource("1_d1p4w")
+background_tile_image = NodePath("")
+symbol_image = NodePath("")
+cash_group = NodePath("")
+cash_label = NodePath("")
+tile_commercial = ExtResource("2_1tn3u")
+tile_residential = ExtResource("3_12d2r")
+tile_park = ExtResource("4_1d6ad")
+tile_industrial = ExtResource("5_4r32j")
+tile_transportation = ExtResource("6_bsa4a")
+
+[node name="Background Building Sprite" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_1tn3u")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 7.0
+offset_right = 126.0
+offset_bottom = 105.0
+alignment = 1
+
+[node name="Symbol Icon" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("7_dfxak")
+expand_mode = 4
+
+[node name="Cash Group" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Cash Label" type="Label" parent="VBoxContainer/Cash Group"]
+layout_mode = 2
+text = "5x"
+label_settings = ExtResource("8_qrk77")
+
+[node name="CashIcon" type="TextureRect" parent="VBoxContainer/Cash Group"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+texture = ExtResource("9_76nhr")
+expand_mode = 2
