@@ -15,8 +15,6 @@ var map:DataMap
 @export var structures: Array[Structure] = []
 # var structuresIndex:int = 2 # Index into structures of the structure being built
 var chosen_structure:Structure
-var placed_structures: Array[PlacedStructure] = [] # A list of unique buildings placed. Multi-cell buildings are in once.
-var grid_structures: = [[[]]]	# A quick way to check if a grid cell has a building on it, or what building it has on it.
 
 var layer:int = 0 # Layer currently viewed
 signal layer_changed(new_layer:int)
@@ -34,18 +32,9 @@ var planes = [] # Used for raycasting mouse
 func initialize():
 	map = DataMap.new()
 	taxman = Taxman.new()
-	placed_structures = []
-	grid_structures = []
 	planes = []
 	for y in range(5):
 		planes.append(Plane(Vector3.UP, Vector3(0, y, 0)))
-		grid_structures.append([])
-		for z in range(4):
-			grid_structures[y].append([])
-			for x in range(4):
-				grid_structures[y][z].append(structures[0])
-				
-	# print_grid_structures()
 	
 	# Create new MeshLibrary dynamically, can also be done in the editor
 	# See: https://docs.godotengine.org/en/stable/tutorials/3d/using_gridmaps.html
@@ -131,19 +120,21 @@ func action_build(gridmap_position:Vector3i):
 		
 		
 		var placed_structure = PlacedStructure.new(chosen_structure, get_facing_from_selector(), \
-									mesh_lib_index, gridmap_position.x, gridmap_position.y, gridmap_position.z)
-		
-		placed_structures.append(placed_structure)
+									mesh_lib_index, gridmap_position)
+									
+		map.placed_structures.append(placed_structure)
+		var placed_structure_index = map.placed_structures.size() - 1
 		gridmap.set_cell_item(gridmap_position, mesh_lib_index, gridmap.get_orthogonal_index_from_basis(selector.basis))
 		
 		var cells = placed_structure.get_cells(get_facing_from_selector())	
 		for position in cells:
-			grid_structures[position.y][position.z][position.x] = chosen_structure
+			map.grid_structures[position.y][position.z][position.x] = placed_structure_index
 			# If we have a multi-cell structure, remove the current 'empty frame' from gridmap
 			if position != gridmap_position:
-				print("resetting grid at " + str(position))
+				print("Removing connected empty grid space at " + str(position))
 				gridmap.set_cell_item(position, -1)
 		
+		print("Player placed " + str(chosen_structure.type) + " at position " + str(gridmap_position))
 		
 		update_base_ui()		
 		selector.visible = false		
@@ -228,50 +219,32 @@ func _on_layer_changed(new_layer):
 	
 	gridmap.clear()		# sets all indices to -1, aka nothing
 	
-	for struct in placed_structures:
-		if struct.pos_y <= layer:
+	for struct in map.placed_structures:
+		if struct.position.y <= layer:
 			# TODO: This won't handle multi-y level structures well. Think on.
-			var cell = Vector3i(struct.pos_x, struct.pos_y, struct.pos_z)
-			gridmap.set_cell_item(cell, struct.mesh_lib_index, struct.get_ortho_basis_from_facing())
+			gridmap.set_cell_item(struct.position, struct.mesh_lib_index, struct.get_ortho_basis_from_facing())
 	
 	# Fill in cube frames on anything build-able at this layer
 	for z in range(4):
 		for x in range(4):
 			var buildable = true
 			for y in range(layer + 1):	
-				if grid_structures[y][z][x].type == Structure.Types.Empty && in_build_mode:
+				var pos = Vector3i(x, y, z)
+				if in_build_mode && not map.has_structure_at(pos):
 					var frameIndex = 1
 					if y == layer:
 						frameIndex = 0
-					gridmap.set_cell_item(Vector3i(x, y, z), frameIndex)
+					gridmap.set_cell_item(pos, frameIndex)
 					break
 					
-				
-	#for y in range(5):
-	#	for z in range(4):
-	#		for x in range(4):
-	#			var cell = Vector3i(x, y, z)
-	###			if y > new_layer:
-		#			gridmap.set_cell_item(cell, -1 ) 
-		#		elif placed_structures.any(func(structure): structure.get_cells.has)
-		#		else:
-		#			#TODO: Currently not respecting orientation or multi-celled buildings
-		#			gridmap.set_cell_item(cell, grid_structures[y][z][x])
-	
-#func print_grid_structures():
-#	for y in range(4,-1,-1):
-#		print ("layer: " + str(y))
-#		for z in range(4):
-#			print(str(grid_structures[y][z][0]) + " " + str(grid_structures[y][z][1]) + " " + str(grid_structures[y][z][2]) + " " + str(grid_structures[y][z][3]))
-
 func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 	if position.x < 0 || position.x > 3		\
 		   || position.z < 0 || position.z > 3:
 		#print("Initial tile outside of grid! At " + str(position))
 		return true
 		
-		# print("Attempted block placement at " + str(position))
 		
+	# Duplicates code in PlacedStructure, could figure out a way to merge if time
 	var facing = get_facing_from_selector()
 			
 	for dy in range(structure.y_size):
@@ -279,13 +252,13 @@ func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 			for dx in range(structure.x_size):
 				var faced_dx = 0
 				var faced_dz = 0
-				if facing == structure.Facings.SW:
+				if facing == PlacedStructure.Facings.SW:
 					faced_dx = dx
 					faced_dz = -1 * dz
-				elif facing == structure.Facings.SE:
+				elif facing == PlacedStructure.Facings.SE:
 					faced_dx = -1 * dz
 					faced_dz = -1 * dx
-				elif facing == structure.Facings.NE:
+				elif facing == PlacedStructure.Facings.NE:
 					faced_dx = -1 * dx
 					faced_dz = dz
 				else:
@@ -297,17 +270,18 @@ func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 						|| new_pos.z < 0 || new_pos.z > 3 	\
 						|| new_pos.y < 0 || new_pos.y > 4:
 					return true
-				if grid_structures[new_pos.y][new_pos.z][new_pos.x].type != Structure.Types.Empty:
+				if map.has_structure_at(new_pos):
 					# Building already here
 					return true
-				if new_pos.y > 0 && grid_structures[new_pos.y - 1][new_pos.z][new_pos.x].type == Structure.Types.Empty:
+				var beneath_new_pos = new_pos + Vector3i(0, -1, 0)
+				if new_pos.y > 0 && not map.has_structure_at(beneath_new_pos):
 					# Overhang or unsupported placement
 					return true
 					
 						
 	return false;
 
-func get_facing_from_selector() -> Structure.Facings:
+func get_facing_from_selector() -> PlacedStructure.Facings:
 	var orthoIndex = gridmap.get_orthogonal_index_from_basis(selector.basis)
 	# By experimental testing (and with standard facing), this function returns the following indices:
 	# SW: 0 -> SW
@@ -315,13 +289,13 @@ func get_facing_from_selector() -> Structure.Facings:
 	# NE: 10 -> NE
 	# NW: 22 -> NW
 	if orthoIndex == 0:
-		return Structure.Facings.SW
+		return PlacedStructure.Facings.SW
 	if orthoIndex == 16:
-		return Structure.Facings.SE
+		return PlacedStructure.Facings.SE
 	elif orthoIndex == 10:
-		return Structure.Facings.NE
+		return PlacedStructure.Facings.NE
 	else: # orthoIndex == 22:
-		return Structure.Facings.NW
+		return PlacedStructure.Facings.NW
 
 
 func _on_building_option_chosen(building):
@@ -337,19 +311,19 @@ func _on_start_slots_button_pressed():
 	for y in range(5):
 		for z in range(4):
 			for x in range(4):
-				if grid_structures[y][z][x].type != Structure.Types.Empty:
+				if map.has_structure_at(Vector3i(x, y, z)):
 					highest_y_layer = y
 					
 	
 	in_build_mode = false
 	layer_changed.emit(highest_y_layer)
-	slots_screen.set_up(placed_structures, grid_structures, highest_y_layer)
+	slots_screen.set_up(map, highest_y_layer)
 	screen_manager.add_screen(slots_screen)
 	start_slots_panel.visible = false
 
 
 func _on_slots_over(cash_gained:int):
-	building_options_screen.set_buildings(structures[2], structures[3], structures[4])
+	building_options_screen.set_buildings(structures[2], structures[5], structures[4])
 	screen_manager.add_screen(building_options_screen)
 	print("On day " + str(map.day) + ", player gained " + str(cash_gained))
 	map.cash += cash_gained

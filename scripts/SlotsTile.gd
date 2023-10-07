@@ -26,8 +26,6 @@ func set_symbol(symbol:Symbol):
 # NOTE TO SELF - make sure this stays aligned with the editor setting Structures in Builder / CityScreen 
 func set_background_tile_to_building(building_type:Structure.Families):
 	match building_type:
-		Structure.Families.Empty:
-			background_tile_image.visible = false
 		Structure.Families.Residential:
 			background_tile_image.visible = true
 			background_tile_image.texture = tile_residential
@@ -46,7 +44,7 @@ func set_background_tile_to_building(building_type:Structure.Families):
 		_:
 			assert(false)
 
-func set_cash_label(structure:Structure):
+func set_cash_label(structure:PlacedStructure):
 	if structure.income() == 0:
 		cash_group.visible = false
 		return
@@ -56,4 +54,4 @@ func set_cash_label(structure:Structure):
 		cash_label.visible = false
 	else:
 		cash_label.visible = true
-		cash_label.text = str(structure.income) + "x"
+		cash_label.text = str(structure.income()) + "x"

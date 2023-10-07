@@ -26,8 +26,7 @@ var tile_grid = [[]]
 @export var grid_3_2:SlotsTile
 @export var grid_3_3:SlotsTile
 
-var structures:Array[PlacedStructure]
-var structure_grid = [[[]]]
+var map:DataMap
 
 @export var symbols: Array[Symbol] = []
 var symbols_grid = [[]]
@@ -66,9 +65,8 @@ func initialize():
 	_on_layer_changed(layer)
 
 # Needs to be called before initialize	
-func set_up(placed_structures:Array[PlacedStructure], grid_structures, starting_layer:int):
-	structures = placed_structures
-	structure_grid = grid_structures
+func set_up(dmap:DataMap, starting_layer:int):
+	map = dmap
 	layer = starting_layer
 
 
@@ -85,18 +83,20 @@ func show_layer_in_grid():
 		for x in range(4):
 			tile_grid[z][x].visible = true
 			tile_grid[z][x].set_symbol(symbols_grid[z][x])
-				
+			var position = Vector3i(x, layer, z)	
+			
 			if only_symbols_phase:
 				tile_grid[z][x].background_tile_image.visible = false
 				tile_grid[z][x].cash_group.visible = false
-			else:
+			elif map.has_structure_at(position):
 				tile_grid[z][x].background_tile_image.visible = true
-				tile_grid[z][x].cash_group.visible = true
-				# works for no building too.
-				tile_grid[z][x].set_background_tile_to_building(structure_grid[layer][z][x].typeFamily)
-				# later on, work out things like park doubling house taxes
-				tile_grid[z][x].set_cash_label(structure_grid[layer][z][x])
-				
+				var placed_structure = map.get_structure_at(position)
+				tile_grid[z][x].set_background_tile_to_building(placed_structure.structure.family)
+				tile_grid[z][x].set_cash_label(placed_structure)
+			else:
+				tile_grid[z][x].background_tile_image.visible = false
+				tile_grid[z][x].cash_group.visible = false
+								
 	layer_info_group.visible = not only_symbols_phase
 	
 				
@@ -104,15 +104,26 @@ func calculate_layer_effects():
 	# pre-income effects (e.g., doubling income, halving income
 	for z in range(4):
 		for x in range(4):
-			if structure_grid[layer][z][x].type == Structure.Types.SmallPark:
+			var position = Vector3i(x, layer, z)
+			if not map.has_structure_at(position):
+				continue
+			var placed_structure = map.get_structure_at(position)
+			if placed_structure.structure.type == Structure.Types.SmallPark:
 				for dz in range(-1, 2, 1):
 					for dx in range(-1, 2, 1):
-						var cell = Vector2i(x + dx, z + dz)
-						if cell.x < 0 || cell.x > 3 || cell.y < 0 || cell.y > 3:
+						if (dz == 0 && dx == 0):
 							continue
-						print("Checking park at cell " + str(cell))
-						if structure_grid[layer][cell.y][cell.x].family == Structure.Families.Residential:
-							structure_grid[layer][cell.y][cell.x].temp_income += 1
+						var neighborPos = Vector3i(x + dx, layer, z + dz)
+						if neighborPos.x < 0 || neighborPos.x > 3 || neighborPos.y < 0 || neighborPos.y > 3:
+							continue
+						if not map.has_structure_at(neighborPos):
+							continue
+						var neighbor_structure = map.get_structure_at(neighborPos)
+						print("Park has neighbor at cell " + str(neighborPos) + " of type " + str(neighbor_structure.structure.type))
+						if neighbor_structure.structure.family == Structure.Families.Residential:
+							print("Residential! temp income now " + str(neighbor_structure.temp_income))
+							neighbor_structure.temp_income += 1
+							tile_grid[neighborPos.z][neighborPos.x].set_cash_label(neighbor_structure)
 						
 	
 	# income effects
@@ -120,7 +131,11 @@ func calculate_layer_effects():
 		for x in range(4):
 			# HIDDEN ASSUMPTION: income producing buildings are only 1x1x1.
 			# TO FIX: maybe mark each building in structures as income-generated this turn or not.
-			cash_amount += structure_grid[layer][z][x].income
+			var position = Vector3i(x, layer, z)
+			if not map.has_structure_at(position):
+				continue
+			var placed_structure = map.get_structure_at(position)
+			cash_amount += placed_structure.income()
 	cash_label.text = str(cash_amount)
 
 	# symbol manipulation
@@ -165,12 +180,14 @@ func _on_next_phase_button_pressed():
 	elif symbol_cashout_phase:
 		symbol_cashout()
 	else:
+		for placed_structure in map.placed_structures:
+			placed_structure.temp_income = 0
 		exit_screen()
 		slots_over.emit(cash_amount)
 		
 func roll_symbols() -> Array[Symbol]:
 	var all_symbols:Array[Symbol] = []
-	for placed_structure in structures:
+	for placed_structure in map.placed_structures:
 		all_symbols.append_array(placed_structure.structure.symbols)
 		
 	# If nothing produces Symbols, then there's no point to showing the symbols only layer...
@@ -189,13 +206,15 @@ func roll_symbols() -> Array[Symbol]:
 		return all_symbols
 	
 func check_structure_effects(x:int, z:int):
-	if structure_grid[layer][z][x].type == Structure.Types.Empty:
+	var position = Vector3i(x, layer, z)
+	if not map.has_structure_at(position):
 		return
 	if symbols_grid[z][x].type == Symbol.Types.Empty:
 		return
 	
-	# WARNING: currently assumes no symbol-manipulating building actually has income
-	match structure_grid[layer][z][x].type:
+	# WARNING: currently assumes no symbol-manipulating building actually has income (for UI)
+	var placed_structure = map.get_structure_at((position))
+	match placed_structure.structure.type:
 		Structure.Types.TrainStation:
 			if symbols_grid[z][x].family == Symbol.Families.Goods:
 				symbols_grid[z][x] = symbols[0]

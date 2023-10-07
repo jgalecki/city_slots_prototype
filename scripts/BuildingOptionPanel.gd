@@ -24,6 +24,8 @@ func set_option(structure:Structure):
 			building_name_label.text = "Coffee Shop"
 		Structure.Types.TrainStation:
 			building_name_label.text = "Train Station"
+		Structure.Types.SmallPark:
+			building_name_label.text = "Small Park"
 		_:
 			assert(false)
 			
@@ -38,7 +40,7 @@ func set_option(structure:Structure):
 			assert(false)
 			
 	building_dimensions_label.text = "Dimensions: " + str(structure.x_size) + " x " + str(structure.z_size) + " x " + str(structure.y_size)
-	building_income_label.text = str(structure.income)
+	building_income_label.text = str(structure.base_income)
 	building_description_label.text = structure.description
 	building_image.texture = structure.image
 	
