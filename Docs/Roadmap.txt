@@ -71,7 +71,7 @@ Basic turn structure
   xx Choose building
   xx Place building
   Inspect? (Button to continue)
-  Symbol processing
+  xx Symbol processing
   Check against weekly rent
 
 =============================================================

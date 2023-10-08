@@ -119,9 +119,7 @@ func calculate_layer_effects():
 						if not map.has_structure_at(neighborPos):
 							continue
 						var neighbor_structure = map.get_structure_at(neighborPos)
-						print("Park has neighbor at cell " + str(neighborPos) + " of type " + str(neighbor_structure.structure.type))
 						if neighbor_structure.structure.family == Structure.Families.Residential:
-							print("Residential! temp income now " + str(neighbor_structure.temp_income))
 							neighbor_structure.temp_income += 1
 							tile_grid[neighborPos.z][neighborPos.x].set_cash_label(neighbor_structure)
 						
