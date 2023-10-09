@@ -1,42 +1,9 @@
-<p align="center"><img src="icon.png"/></p>
+City Slots Prototype
 
-# Starter Kit City Builder
+This is my third project for Tiny Mass Games. Tiny Mass Games is a game dev collective focused on building polished short-form games in a two-month time-span.
 
-This package includes a basic template for a 3D city builder in Godot 4.1.1.stable.official. Includes features like;
+City Slots is meant to be a cross between the roguelike slots game Luck Be a Landlord and the tiny city building The Block. This repo is the game after one week's worth of development. It has the basics of the system in: building selection, building placement, symbol generation, and symbol interaction with buildings as the symbols "fall through" five layers of the city. There are only four buildings and two symbols included so far, but this project should demonstrate how new buildings or symbols would fit in.
 
-- Building and removing structures
-- Smooth camera controls
-- Dynamic MeshLibrary creation
-- Saving/loading
-- Sprites and 3D Models _(CC0 licensed)_
+This is being released under the MIT license, and other game devs (and other TMG devs) may find it helpful on getting started making a game.
 
-### Screenshot
-
-<p align="center"><img src="screenshots/screenshot.png"/></p>
-
-### Controls
-
-| Key | Command |
-| --- | --- |
-| <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> | Move camera |
-| <kbd>Middle mouse button</kbd> | Hold to rotate camera |
-| <kbd>Left mouse button</kbd> | Place building |
-| <kbd>DEL</kbd> | Remove building |
-| <kbd>Right mouse button</kbd> | Rotate building |
-| <kbd>Q</kbd> <kbd>E</kbd>  | Toggle between buildings |
-| <kbd>F1</kbd> | Save |
-| <kbd>F2</kbd> | Load |
-
-### License
-
-MIT License
-
-Copyright (c) 2023 Kenney
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-Assets included in this package (2D sprites, 3D models and sound effects) are [CC0 licensed](https://creativecommons.org/publicdomain/zero/1.0/)
+This project started off with Kenney's City Builder Starter Kit (https://github.com/KenneyNL/Starter-Kit-City-Builder). Love Kenney and his work, it's been extremely valuable to me as a game dev.
