@@ -21,7 +21,7 @@ func _init():
 				grid_structures[y][z].append(-1)
 
 func has_structure_at(position:Vector3i) -> bool:
-	assert(position.y >= 0 && position.y <= 4 && position.z >= 0 && position.z <= 3 && position.x >= 0 && position.x <= 3)
+	assert(is_in_bounds(position))
 	return grid_structures[position.y][position.z][position.x] != -1
 
 func get_structure_at(position:Vector3i) -> PlacedStructure:
@@ -33,3 +33,12 @@ func get_structure_at(position:Vector3i) -> PlacedStructure:
 	assert(placed_structure_index >= 0 && placed_structure_index < placed_structures.size())
 	
 	return placed_structures[placed_structure_index]
+
+func is_in_bounds(position:Vector3i) -> bool:
+	return position.x >= 0 && position.x <= 3 		\
+			&& position.y >= 0 && position.y <= 4 	\
+			&& position.z >= 0 && position.z <= 3
+
+func is_in_bounds_2d(position:Vector2i) -> bool:
+	return position.x >= 0 && position.x <= 3 		\
+			&& position.y >= 0 && position.y <= 3 

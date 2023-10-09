@@ -114,7 +114,7 @@ func calculate_layer_effects():
 						if (dz == 0 && dx == 0):
 							continue
 						var neighborPos = Vector3i(x + dx, layer, z + dz)
-						if neighborPos.x < 0 || neighborPos.x > 3 || neighborPos.y < 0 || neighborPos.y > 3:
+						if not map.is_in_bounds(neighborPos):
 							continue
 						if not map.has_structure_at(neighborPos):
 							continue

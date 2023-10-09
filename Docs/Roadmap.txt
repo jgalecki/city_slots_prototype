@@ -1,34 +1,36 @@
-Week 1: Basic UI and placement. Layer selection and display. Background Grid. Random starting building placement. Slot 'pull' and symbol generation. Display of three building choices, user selection of building. User placement of building (layer, rotation).
-Symbol count: 1
-Building count: 3
+Initial plan
 
-Week 2: UI Popup display when hovering over a building in playing grid or selection options. Generation of new symbols (not just money) and interactions with buildings underneath, layer by layer. Adjacency effects for buildings. Weekly 'rent' objectives, winning and losing conditions. Decide on color palette and city 'theme'.
-Symbol count: 3
-Building count: 3
-
-Week 3: Additional buildings and symbols. Sound effects. Get cranking on Asset Forge. Title screen and scene loading.
-Symbol count: 7
-Building count: 7
-
-Week 4: More buildings and symbols. Balance. Juice the hell out of building placement and symbol fallthrough. Title screen soundtrack selection
-Symbol count: 10
-Building count: 10
-
-Week 5: Additional polish. More buildings and symbols. UI Theming.
-Symbol count: 13
-Building count: 13
-
-Week 6: Additional polish. Key art for itch page, steam page. Finish off symbols and buildings. Variants for topped and topless buildings
-Symbol count: 16
-Buidling count: 16
-
-Week 7: Lighting and shader experimentation week. More polish. More symbols and buildings?
-Symbol count: 20
-Buidling count: 20
-
-Week 8: Final week! Polish, playtest, rinse and repeat.
-Symbol count: 20
-Buidling count: 20
+  Week 1: Basic UI and placement. Layer selection and display. Background Grid. Random starting building placement. Slot 'pull' and symbol generation. Display of three building choices, user selection of building. User placement of building (layer, rotation).
+  Symbol count: 1
+  Building count: 3
+  
+  Week 2: UI Popup display when hovering over a building in playing grid or selection options. Generation of new symbols (not just money) and interactions with buildings underneath, layer by layer. Adjacency effects for buildings. Weekly 'rent' objectives, winning and losing conditions. Decide on color palette and city 'theme'.
+  Symbol count: 3
+  Building count: 3
+  
+  Week 3: Additional buildings and symbols. Sound effects. Get cranking on Asset Forge. Title screen and scene loading.
+  Symbol count: 7
+  Building count: 7
+  
+  Week 4: More buildings and symbols. Balance. Juice the hell out of building placement and symbol fallthrough. Title screen soundtrack selection
+  Symbol count: 10
+  Building count: 10
+  
+  Week 5: Additional polish. More buildings and symbols. UI Theming.
+  Symbol count: 13
+  Building count: 13
+  
+  Week 6: Additional polish. Key art for itch page, steam page. Finish off symbols and buildings. Variants for topped and topless buildings
+  Symbol count: 16
+  Buidling count: 16
+  
+  Week 7: Lighting and shader experimentation week. More polish. More symbols and buildings?
+  Symbol count: 20
+  Buidling count: 20
+  
+  Week 8: Final week! Polish, playtest, rinse and repeat.
+  Symbol count: 20
+  Buidling count: 20
 
 
 
@@ -72,7 +74,7 @@ Basic turn structure
   xx Place building
   Inspect? (Button to continue)
   xx Symbol processing
-  Check against weekly rent
+  xx Check against weekly rent
 
 =============================================================
 Model import: Creating a 4x4x4 block building
@@ -84,3 +86,13 @@ Model import: Creating a 4x4x4 block building
   Point its 'Model' attribute to the new .glb file
   In Builder's Structures property, expand on structures and point to the proper .tres resource
 =============================================================
+
+Week 2:
+    xx Weekly game structure / rent due
+    xx Game over screen
+    Hover popup for buildings, symbols
+    Look at shaders
+    Look at color palettes
+    Shader to apply color palette?
+    Sound investigations
+    5 more buildings / interactions

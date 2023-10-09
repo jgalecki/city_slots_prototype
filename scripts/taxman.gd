@@ -2,11 +2,17 @@ extends Resource
 # Functions for dealing with rent, win / loss, etc.
 class_name Taxman
 
-func days_until_tax(day:int) -> int:
-	return 7 - ((day - 1) % 7)
+func game_over(map:DataMap) -> bool:
+	return is_rent_time(map) && map.cash <= money_needed_for_next_rent(map)
+
+func is_rent_time(map:DataMap) -> int:
+	return map.day > 0 && days_until_rent(map) == 7
+
+func days_until_rent(map:DataMap) -> int:
+	return 7 - ((map.day - 1) % 7)
 	
-func tax_needed_for_next_rent(day:int) -> int:
-	var cycle = day / 7 + 1
+func money_needed_for_next_rent(map:DataMap) -> int:
+	var cycle = map.day / 7 + 1
 	match cycle:
 		1:
 			return 15

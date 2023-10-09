@@ -99,3 +99,5 @@ Apartments don't create symbols or modify passing symbols. Their income value is
 [node name="Build Button" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "BUILD"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Build Button" to="." method="_on_button_pressed"]

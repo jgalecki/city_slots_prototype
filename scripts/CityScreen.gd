@@ -5,6 +5,7 @@ var map:DataMap
 
 @export var building_options_screen:BuildingOptionsScreen
 @export var slots_screen:SlotsScreen
+@export var game_over_screen:GameOverScreen
 
 @export var start_slots_panel:PanelContainer
 @export var cash_display:Label
@@ -52,7 +53,7 @@ func initialize():
 	gridmap.mesh_library = mesh_library
 	
 	for i in range(4):
-		for j in range(4):
+		for j in range(5):
 			for k in range(4):
 				gridmap.set_cell_item(Vector3i(i, j, k), 0)
 			
@@ -178,8 +179,8 @@ func update_structure(structure:Structure):
 func update_base_ui():
 	cash_display.text = "$" + str(map.cash)
 	layer_display.text = str(layer)
-	days_til_rent_display.text = str(taxman.days_until_tax(map.day))
-	rent_needed_display.text = str(taxman.tax_needed_for_next_rent(map.day))
+	days_til_rent_display.text = str(taxman.days_until_rent(map))
+	rent_needed_display.text = str(taxman.money_needed_for_next_rent(map))
 
 # Saving/load
 
@@ -238,15 +239,14 @@ func _on_layer_changed(new_layer):
 					break
 					
 func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
-	if position.x < 0 || position.x > 3		\
-		   || position.z < 0 || position.z > 3:
-		#print("Initial tile outside of grid! At " + str(position))
+	if not map.is_in_bounds(position):
 		return true
 		
-		
+	
 	# Duplicates code in PlacedStructure, could figure out a way to merge if time
 	var facing = get_facing_from_selector()
-			
+	
+	# Loop assumes buildings are concave, not convex, and checks a bounding box.		
 	for dy in range(structure.y_size):
 		for dz in range(structure.z_size):
 			for dx in range(structure.x_size):
@@ -266,9 +266,7 @@ func illegal_build_position(position:Vector3i, structure:Structure) -> bool:
 					faced_dz = dx 
 				# Assumes structures are not concave - no L tetraminos.
 				var new_pos = position + Vector3i(faced_dx, dy, faced_dz)
-				if new_pos.x < 0 || new_pos.x > 3 			\
-						|| new_pos.z < 0 || new_pos.z > 3 	\
-						|| new_pos.y < 0 || new_pos.y > 4:
+				if not map.is_in_bounds(new_pos):
 					return true
 				if map.has_structure_at(new_pos):
 					# Building already here
@@ -315,6 +313,7 @@ func _on_start_slots_button_pressed():
 					highest_y_layer = y
 					
 	
+	print("on Start Slots press, cash is " + str(map.cash))
 	in_build_mode = false
 	layer_changed.emit(highest_y_layer)
 	slots_screen.set_up(map, highest_y_layer)
@@ -323,9 +322,43 @@ func _on_start_slots_button_pressed():
 
 
 func _on_slots_over(cash_gained:int):
-	building_options_screen.set_buildings(structures[2], structures[5], structures[4])
-	screen_manager.add_screen(building_options_screen)
 	print("On day " + str(map.day) + ", player gained " + str(cash_gained))
+	print("on Next Day press, cash is " + str(map.cash))
 	map.cash += cash_gained
+	print("after cahs inc, cash is " + str(map.cash))
 	map.day += 1
 	update_base_ui()
+	
+	if taxman.game_over(map):
+		screen_manager.add_screen(game_over_screen)
+		return
+	
+	if taxman.days_until_rent(map) == 0:
+		map.cash -= taxman.money_needed_for_next_rent(map)
+		update_base_ui()
+		
+		# relic screen or something?	
+
+	building_options_screen.set_buildings(structures[2], structures[5], structures[4])
+	screen_manager.add_screen(building_options_screen)	
+
+
+func _on_restart_button_pressed():
+	map = DataMap.new()
+	taxman = Taxman.new()
+	
+	for i in range(4):
+		for j in range(5):
+			for k in range(4):
+				gridmap.set_cell_item(Vector3i(i, j, k), 0)
+			
+	layer = 0
+	layer_changed.emit(layer)
+	
+	selector.visible = false
+	start_slots_panel.visible = false
+	update_base_ui()	
+	
+	# good enough for now, random selection later...
+	building_options_screen.set_buildings(structures[2], structures[5], structures[4])
+	screen_manager.add_screen(building_options_screen)

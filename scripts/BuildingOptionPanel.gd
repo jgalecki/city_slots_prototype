@@ -43,13 +43,6 @@ func set_option(structure:Structure):
 	building_income_label.text = str(structure.base_income)
 	building_description_label.text = structure.description
 	building_image.texture = structure.image
-	
-	# set button signal to be structure
-	build_button.pressed.connect(self._on_button_press)
-	
-func _on_button_press():
-	print(str(displayed_structure.type))
-	building_chosen.emit(displayed_structure)
 		
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -59,3 +52,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+
+func _on_button_pressed():
+	print(str(displayed_structure.type))
+	building_chosen.emit(displayed_structure)

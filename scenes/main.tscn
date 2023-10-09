@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://vgwrcfy1qawf"]
+[gd_scene load_steps=28 format=3 uid="uid://vgwrcfy1qawf"]
 
 [ext_resource type="Script" path="res://scripts/ScreenManager.gd" id="1_j0luj"]
 [ext_resource type="Environment" uid="uid://jbptgqvstei3" path="res://scenes/main-environment.tres" id="1_yndf3"]
@@ -25,6 +25,7 @@
 [ext_resource type="Resource" uid="uid://4ue4p26r4ny8" path="res://symbols/coffee.tres" id="20_y8jx8"]
 [ext_resource type="PackedScene" uid="uid://bdel71gu6ck4c" path="res://scenes/UI/tile_control.tscn" id="21_s6w1x"]
 [ext_resource type="LabelSettings" uid="uid://cjate5pntbrh6" path="res://Themes/Big Panel Labels.tres" id="25_onqml"]
+[ext_resource type="Script" path="res://scripts/GameOverScreen.gd" id="26_oq624"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_q176i"]
 font = ExtResource("16_vlub6")
@@ -37,10 +38,11 @@ shadow_color = Color(0, 0, 0, 0.392157)
 script = ExtResource("1_j0luj")
 initial_screen = NodePath("../Builder")
 
-[node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("building_options_screen", "slots_screen", "start_slots_panel", "cash_display", "layer_display", "days_til_rent_display", "rent_needed_display", "selector", "selector_container", "view_camera", "gridmap")]
+[node name="Builder" type="Node3D" parent="." node_paths=PackedStringArray("building_options_screen", "slots_screen", "game_over_screen", "start_slots_panel", "cash_display", "layer_display", "days_til_rent_display", "rent_needed_display", "selector", "selector_container", "view_camera", "gridmap")]
 script = ExtResource("2_wy2xj")
 building_options_screen = NodePath("../CanvasLayer/Building Options Screen")
 slots_screen = NodePath("../CanvasLayer/Slots Screen")
+game_over_screen = NodePath("../CanvasLayer/Game Over Screen")
 start_slots_panel = NodePath("../CanvasLayer/Next Turn Panel")
 cash_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer/Cash")
 layer_display = NodePath("../CanvasLayer/UI Stats/MarginContainer/VBoxContainer/HBoxContainer2/Layer")
@@ -448,6 +450,35 @@ offset_top = 421.0
 offset_right = 522.0
 offset_bottom = 546.0
 
+[node name="Game Over Screen" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+offset_left = 483.0
+offset_top = 147.0
+offset_right = 1452.0
+offset_bottom = 895.0
+script = ExtResource("26_oq624")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Game Over Screen"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Game Over Screen/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Game Over Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Game Over!"
+horizontal_alignment = 1
+
+[node name="Restart Button" type="Button" parent="CanvasLayer/Game Over Screen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Click to Restart"
+
 [connection signal="layer_changed" from="Builder" to="Builder" method="_on_layer_changed"]
 [connection signal="layer_changed" from="Builder" to="View" method="_on_city_screen_layer_changed"]
 [connection signal="building_chosen" from="CanvasLayer/Building Options Screen/HBoxContainer/Building Option A" to="Builder" method="_on_building_option_chosen"]
@@ -464,3 +495,5 @@ offset_bottom = 546.0
 [connection signal="slots_over" from="CanvasLayer/Slots Screen" to="Builder" method="_on_slots_over"]
 [connection signal="slots_over" from="CanvasLayer/Slots Screen" to="View" method="_on_slots_screen_slots_over"]
 [connection signal="pressed" from="CanvasLayer/Slots Screen/MarginContainer/VBoxContainer/HBoxContainer/Next Phase Button" to="CanvasLayer/Slots Screen" method="_on_next_phase_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Game Over Screen/MarginContainer/VBoxContainer/Restart Button" to="Builder" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Game Over Screen/MarginContainer/VBoxContainer/Restart Button" to="CanvasLayer/Game Over Screen" method="_on_restart_button_pressed"]
